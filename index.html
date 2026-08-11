@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Test Scanner QR</title>
+
+  <script src="https://unpkg.com/html5-qrcode"
+          type="text/javascript"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #062b78;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #0b3d91;
+      color: white;
+    }
+
+    #reader {
+      background: white;
+      padding: 10px;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    #hasil {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+
+    .success {
+      background: #e8f8ed;
+      border: 1px solid #54b86b;
+      color: #176b2b;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .nomor {
+      font-size: 22px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>TEST SCANNER QR</h1>
+
+  <div class="subtitle">
+    Registrasi Ulang Lomba<br>
+    TVRI Sulawesi Barat
+  </div>
+
+  <button id="mulaiButton" onclick="mulaiScanner()">
+    📷 MULAI SCAN QR CODE
+  </button>
+
+  <div id="reader"></div>
+
+  <div id="hasil">
+    <div class="success">
+      ✅ QR CODE BERHASIL DIBACA
+    </div>
+
+    <div class="nomor" id="nomorQR"></div>
+  </div>
+
+</div>
+
+<script>
+
+let scanner = null;
+let sudahScan = false;
+
+
+// =====================================================
+// MULAI SCANNER
+// =====================================================
+
+function mulaiScanner() {
+
+  document.getElementById("mulaiButton").style.display = "none";
+
+  scanner = new Html5Qrcode("reader");
+
+  const config = {
+    fps: 10,
+
+    qrbox: {
+      width: 250,
+      height: 250
+    }
+  };
+
+  scanner.start(
+    {
+      facingMode: "environment"
+    },
+
+    config,
+
+    onScanSuccess,
+
+    onScanFailure
+
+  ).catch(function(error) {
+
+    document.getElementById("reader").innerHTML = `
+      <div style="
+        background:#fdeaea;
+        color:#9b1c18;
+        padding:15px;
+        border-radius:10px;
+        margin-top:10px;
+      ">
+        <b>❌ KAMERA TIDAK DAPAT DIAKSES</b>
+        <br><br>
+        ${error}
+      </div>
+    `;
+
+  });
+
+}
+
+
+// =====================================================
+// QR BERHASIL DIBACA
+// =====================================================
+
+function onScanSuccess(decodedText, decodedResult) {
+
+  if (sudahScan) {
+    return;
+  }
+
+  sudahScan = true;
+
+  document.getElementById("nomorQR").textContent =
+    decodedText.trim();
+
+  document.getElementById("hasil").style.display = "block";
+
+  if (scanner) {
+
+    scanner.stop().then(function() {
+
+      console.log("Scanner dihentikan.");
+
+    }).catch(function(error) {
+
+      console.log("Gagal menghentikan scanner:", error);
+
+    });
+
+  }
+
+}
+
+
+// =====================================================
+// QR BELUM TERBACA
+// =====================================================
+
+function onScanFailure(error) {
+
+  // Tidak perlu menampilkan error
+  // karena fungsi ini dipanggil terus-menerus
+  // selama kamera mencari QR.
+  
+}
+
+</script>
+
+</body>
+</html>
