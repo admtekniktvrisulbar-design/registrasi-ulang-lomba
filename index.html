@@ -10,7 +10,6 @@
 
   <title>Registrasi Ulang Lomba</title>
 
-  <!-- HTML5 QR CODE -->
   <script
     src="https://unpkg.com/html5-qrcode"
     type="text/javascript">
@@ -138,6 +137,106 @@
       box-shadow: 0 3px 12px rgba(0,0,0,0.12);
 
       text-align: left;
+
+    }
+
+
+    #pencarian {
+
+      display: none;
+
+      background: white;
+
+      padding: 20px;
+
+      border-radius: 15px;
+
+      margin-top: 20px;
+
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+
+    }
+
+
+    .search-input {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border: 1px solid #ccc;
+
+      border-radius: 10px;
+
+      font-size: 16px;
+
+      margin-top: 10px;
+
+    }
+
+
+    .search-button {
+
+      background: #0b3d91;
+
+    }
+
+
+    .result-card {
+
+      background: #f8f9fa;
+
+      border: 1px solid #ddd;
+
+      border-radius: 10px;
+
+      padding: 15px;
+
+      margin-top: 12px;
+
+      text-align: left;
+
+    }
+
+
+    .result-number {
+
+      color: #062b78;
+
+      font-size: 20px;
+
+      font-weight: bold;
+
+    }
+
+
+    .result-name {
+
+      font-size: 17px;
+
+      font-weight: bold;
+
+      margin-top: 5px;
+
+    }
+
+
+    .result-detail {
+
+      color: #666;
+
+      margin-top: 5px;
+
+      font-size: 14px;
+
+    }
+
+
+    .choose-button {
+
+      background: #198754;
+
+      margin-top: 12px;
 
     }
 
@@ -283,15 +382,6 @@
     }
 
 
-    .status-error {
-
-      background: #fdeaea;
-
-      color: #9b1c18;
-
-    }
-
-
     .loading {
 
       text-align: center;
@@ -317,13 +407,6 @@
       background: #198754;
 
       margin-top: 20px;
-
-    }
-
-
-    .registrasi-button:disabled {
-
-      background: #999;
 
     }
 
@@ -366,16 +449,29 @@
 
 
   <!-- =====================================================
-       TOMBOL MULAI SCAN
+       MENU UTAMA
        ===================================================== -->
 
-  <button
-    id="mulaiButton"
-    onclick="mulaiScanner()">
+  <div id="menuUtama">
 
-    📷 MULAI SCAN QR CODE
+    <button
+      id="mulaiButton"
+      onclick="mulaiScanner()">
 
-  </button>
+      📷 MULAI SCAN QR CODE
+
+    </button>
+
+
+    <button
+      class="secondary-button"
+      onclick="bukaPencarian()">
+
+      🔎 CARI PESERTA MANUAL
+
+    </button>
+
+  </div>
 
 
   <!-- =====================================================
@@ -386,12 +482,58 @@
 
 
   <!-- =====================================================
+       AREA PENCARIAN
+       ===================================================== -->
+
+  <div id="pencarian">
+
+    <h2 style="color:#062b78; margin-top:0;">
+      🔎 CARI PESERTA
+    </h2>
+
+
+    <div style="color:#666; margin-bottom:10px;">
+
+      Masukkan nama atau nomor peserta
+
+    </div>
+
+
+    <input
+      id="inputPencarian"
+      class="search-input"
+      type="text"
+      placeholder="Contoh: MG1012-001 atau nama peserta">
+
+
+    <button
+      class="search-button"
+      onclick="cariManual()">
+
+      🔎 CARI PESERTA
+
+    </button>
+
+
+    <div id="hasilPencarian"></div>
+
+
+    <button
+      class="secondary-button"
+      onclick="kembaliKeMenu()">
+
+      ← KEMBALI
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
        HASIL PESERTA
        ===================================================== -->
 
   <div id="hasil">
-
-    <!-- ISI AKAN DIISI OLEH JAVASCRIPT -->
 
   </div>
 
@@ -422,45 +564,35 @@ let sudahScan = false;
 let nomorPesertaAktif = "";
 
 
-
 // =====================================================
 // MULAI SCANNER
 // =====================================================
 
 function mulaiScanner() {
 
-
-  const mulaiButton =
-    document.getElementById("mulaiButton");
-
-
-  const hasil =
-    document.getElementById("hasil");
+  document.getElementById("menuUtama")
+    .style.display = "none";
 
 
-  // Sembunyikan tombol mulai
-  mulaiButton.style.display = "none";
+  document.getElementById("pencarian")
+    .style.display = "none";
 
 
-  // Sembunyikan hasil sebelumnya
-  hasil.style.display = "none";
+  document.getElementById("hasil")
+    .style.display = "none";
 
 
-  // Kosongkan hasil
-  hasil.innerHTML = "";
+  document.getElementById("hasil").innerHTML = "";
 
 
-  // Reset variabel
+  document.getElementById("reader").innerHTML = "";
+
+
   sudahScan = false;
 
   nomorPesertaAktif = "";
 
 
-  // Bersihkan reader
-  document.getElementById("reader").innerHTML = "";
-
-
-  // Buat scanner baru
   scanner =
     new Html5Qrcode("reader");
 
@@ -480,7 +612,6 @@ function mulaiScanner() {
   };
 
 
-  // Mulai kamera
   scanner.start(
 
     {
@@ -496,7 +627,6 @@ function mulaiScanner() {
   )
 
   .catch(function(error) {
-
 
     console.error(
       "Kamera gagal:",
@@ -523,13 +653,12 @@ function mulaiScanner() {
     `;
 
 
-    mulaiButton.style.display =
-      "block";
+    document.getElementById("menuUtama")
+      .style.display = "block";
 
   });
 
 }
-
 
 
 // =====================================================
@@ -541,9 +670,6 @@ function onScanSuccess(
   decodedResult
 ) {
 
-
-  // Jika sudah berhasil scan,
-  // jangan proses QR berulang kali
   if (sudahScan) {
 
     return;
@@ -554,7 +680,6 @@ function onScanSuccess(
   sudahScan = true;
 
 
-  // Simpan nomor peserta
   nomorPesertaAktif =
     decodedText.trim();
 
@@ -565,9 +690,7 @@ function onScanSuccess(
   );
 
 
-  // Hentikan scanner
   if (scanner) {
-
 
     scanner.stop()
 
@@ -591,11 +714,9 @@ function onScanSuccess(
   }
 
 
-  // Tampilkan proses pencarian
   tampilkanLoading();
 
 
-  // Cari data peserta
   cekPeserta(
     nomorPesertaAktif
   );
@@ -603,13 +724,11 @@ function onScanSuccess(
 }
 
 
-
 // =====================================================
-// TAMPILKAN LOADING
+// LOADING
 // =====================================================
 
 function tampilkanLoading() {
-
 
   const hasil =
     document.getElementById("hasil");
@@ -639,19 +758,11 @@ function tampilkanLoading() {
 }
 
 
-
 // =====================================================
-// CEK PESERTA
+// CEK PESERTA BERDASARKAN NOMOR
 // =====================================================
 
 function cekPeserta(nomor) {
-
-
-  console.log(
-    "Mencari peserta:",
-    nomor
-  );
-
 
   fetch(
 
@@ -660,6 +771,164 @@ function cekPeserta(nomor) {
     "?action=cek&nomor=" +
 
     encodeURIComponent(nomor)
+
+  )
+
+  .then(function(response) {
+
+    if (!response.ok) {
+
+      throw new Error(
+        "HTTP Error " +
+        response.status
+      );
+
+    }
+
+
+    return response.json();
+
+  })
+
+
+  .then(function(data) {
+
+    console.log(
+      "Respons API:",
+      data
+    );
+
+
+    if (
+      data.success &&
+      data.ditemukan
+    ) {
+
+      tampilkanPeserta(
+        data.peserta
+      );
+
+    } else {
+
+      tampilkanPesertaTidakDitemukan(
+        data.message ||
+        "Nomor peserta tidak ditemukan."
+      );
+
+    }
+
+  })
+
+
+  .catch(function(error) {
+
+    console.error(
+      "Error API:",
+      error
+    );
+
+
+    tampilkanErrorAPI();
+
+  });
+
+}
+
+
+// =====================================================
+// BUKA PENCARIAN MANUAL
+// =====================================================
+
+function bukaPencarian() {
+
+  document.getElementById("menuUtama")
+    .style.display = "none";
+
+
+  document.getElementById("reader")
+    .innerHTML = "";
+
+
+  document.getElementById("hasil")
+    .style.display = "none";
+
+
+  document.getElementById("pencarian")
+    .style.display = "block";
+
+
+  document.getElementById("hasilPencarian")
+    .innerHTML = "";
+
+
+  document.getElementById("inputPencarian")
+    .value = "";
+
+
+  setTimeout(function() {
+
+    document.getElementById(
+      "inputPencarian"
+    ).focus();
+
+  }, 100);
+
+}
+
+
+// =====================================================
+// PENCARIAN MANUAL
+// =====================================================
+
+function cariManual() {
+
+  const input =
+    document.getElementById(
+      "inputPencarian"
+    );
+
+
+  const keyword =
+    input.value.trim();
+
+
+  const hasil =
+    document.getElementById(
+      "hasilPencarian"
+    );
+
+
+  if (!keyword) {
+
+    alert(
+      "Masukkan nama atau nomor peserta."
+    );
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  hasil.innerHTML = `
+
+    <div class="loading">
+
+      🔄 MENCARI PESERTA...
+
+    </div>
+
+  `;
+
+
+  fetch(
+
+    API_URL +
+
+    "?action=cari&q=" +
+
+    encodeURIComponent(keyword)
 
   )
 
@@ -683,55 +952,171 @@ function cekPeserta(nomor) {
 
   .then(function(data) {
 
-
     console.log(
-      "Respons API:",
+      "Hasil pencarian:",
       data
     );
 
 
     if (
       data.success &&
-      data.ditemukan
+      data.jumlah > 0
     ) {
 
-
-      tampilkanPeserta(
+      tampilkanHasilPencarian(
         data.peserta
       );
 
-
     } else {
 
+      hasil.innerHTML = `
 
-      tampilkanPesertaTidakDitemukan(
-        data.message ||
-        "Nomor peserta tidak ditemukan."
-      );
+        <div class="error">
+
+          ❌ PESERTA TIDAK DITEMUKAN
+
+          <br><br>
+
+          ${data.message ||
+          "Tidak ada peserta yang cocok."}
+
+        </div>
+
+      `;
 
     }
-
 
   })
 
 
   .catch(function(error) {
 
-
     console.error(
-      "Error API:",
+      "Error pencarian:",
       error
     );
 
 
-    tampilkanErrorAPI(
-      error
-    );
+    hasil.innerHTML = `
+
+      <div class="error">
+
+        ❌ GAGAL MENGHUBUNGI SERVER
+
+        <br><br>
+
+        Silakan coba lagi.
+
+      </div>
+
+    `;
 
   });
 
 }
 
+
+// =====================================================
+// TAMPILKAN HASIL PENCARIAN
+// =====================================================
+
+function tampilkanHasilPencarian(
+  pesertaList
+) {
+
+  const hasil =
+    document.getElementById(
+      "hasilPencarian"
+    );
+
+
+  let html = `
+
+    <div style="
+      margin-top:20px;
+      font-weight:bold;
+      color:#555;
+    ">
+
+      Ditemukan ${pesertaList.length} peserta
+
+    </div>
+
+  `;
+
+
+  pesertaList.forEach(function(peserta) {
+
+    html += `
+
+      <div class="result-card">
+
+        <div class="result-number">
+
+          ${peserta.nomor}
+
+        </div>
+
+
+        <div class="result-name">
+
+          ${peserta.nama || "-"}
+
+        </div>
+
+
+        <div class="result-detail">
+
+          Usia: ${peserta.usia || "-"}<br>
+
+          Kategori: ${peserta.kategori || "-"}
+
+        </div>
+
+
+        <button
+          class="choose-button"
+          onclick='pilihPeserta(${JSON.stringify(peserta)})'>
+
+          👤 PILIH PESERTA
+
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+
+  hasil.innerHTML = html;
+
+}
+
+
+// =====================================================
+// PILIH PESERTA DARI HASIL PENCARIAN
+// =====================================================
+
+function pilihPeserta(peserta) {
+
+  nomorPesertaAktif =
+    String(peserta.nomor).trim();
+
+
+  document.getElementById("pencarian")
+    .style.display = "none";
+
+
+  document.getElementById("hasil")
+    .style.display = "block";
+
+
+  tampilkanPeserta(
+    peserta
+  );
+
+}
 
 
 // =====================================================
@@ -742,7 +1127,6 @@ function tampilkanPeserta(
   peserta
 ) {
 
-
   const hasil =
     document.getElementById("hasil");
 
@@ -750,7 +1134,6 @@ function tampilkanPeserta(
   hasil.style.display = "block";
 
 
-  // Status pembayaran
   let kelasPembayaran =
     "status-belum";
 
@@ -767,7 +1150,6 @@ function tampilkanPeserta(
   }
 
 
-  // Status registrasi
   let kelasRegistrasi =
     "status-belum";
 
@@ -785,7 +1167,6 @@ function tampilkanPeserta(
   }
 
 
-  // Apakah peserta sudah registrasi?
   const sudahRegistrasi =
     String(
       peserta.statusRegistrasi
@@ -793,7 +1174,6 @@ function tampilkanPeserta(
     "Sudah Registrasi";
 
 
-  // Apakah pembayaran lunas?
   const pembayaranLunas =
     String(
       peserta.statusPembayaran
@@ -801,12 +1181,10 @@ function tampilkanPeserta(
     "Lunas";
 
 
-  // Buat tombol registrasi
   let tombolRegistrasi = "";
 
 
   if (sudahRegistrasi) {
-
 
     tombolRegistrasi = `
 
@@ -820,9 +1198,10 @@ function tampilkanPeserta(
 
     `;
 
+  }
 
-  } else if (!pembayaranLunas) {
 
+  else if (!pembayaranLunas) {
 
     tombolRegistrasi = `
 
@@ -836,9 +1215,10 @@ function tampilkanPeserta(
 
     `;
 
+  }
 
-  } else {
 
+  else {
 
     tombolRegistrasi = `
 
@@ -856,7 +1236,6 @@ function tampilkanPeserta(
   }
 
 
-  // Waktu registrasi
   let waktuHTML = "";
 
 
@@ -879,7 +1258,6 @@ function tampilkanPeserta(
   }
 
 
-  // Tampilkan seluruh data
   hasil.innerHTML = `
 
     <div class="success">
@@ -992,9 +1370,9 @@ function tampilkanPeserta(
 
       <button
         class="secondary-button"
-        onclick="scanPesertaBerikutnya()">
+        onclick="kembaliKeMenu()">
 
-        📷 SCAN PESERTA BERIKUTNYA
+        ← KEMBALI KE MENU
 
       </button>
 
@@ -1006,7 +1384,6 @@ function tampilkanPeserta(
 }
 
 
-
 // =====================================================
 // PESERTA TIDAK DITEMUKAN
 // =====================================================
@@ -1014,7 +1391,6 @@ function tampilkanPeserta(
 function tampilkanPesertaTidakDitemukan(
   message
 ) {
-
 
   const hasil =
     document.getElementById("hasil");
@@ -1052,9 +1428,9 @@ function tampilkanPesertaTidakDitemukan(
 
     <button
       class="secondary-button"
-      onclick="scanPesertaBerikutnya()">
+      onclick="kembaliKeMenu()">
 
-      📷 SCAN ULANG
+      ← KEMBALI KE MENU
 
     </button>
 
@@ -1063,15 +1439,11 @@ function tampilkanPesertaTidakDitemukan(
 }
 
 
-
 // =====================================================
 // ERROR API
 // =====================================================
 
-function tampilkanErrorAPI(
-  error
-) {
-
+function tampilkanErrorAPI() {
 
   const hasil =
     document.getElementById("hasil");
@@ -1109,9 +1481,9 @@ function tampilkanErrorAPI(
 
     <button
       class="secondary-button"
-      onclick="scanPesertaBerikutnya()">
+      onclick="kembaliKeMenu()">
 
-      📷 COBA LAGI
+      ← KEMBALI KE MENU
 
     </button>
 
@@ -1120,21 +1492,17 @@ function tampilkanErrorAPI(
 }
 
 
-
 // =====================================================
 // REGISTRASI PESERTA
 // =====================================================
 
 function registrasiPeserta() {
 
-
   if (!nomorPesertaAktif) {
-
 
     alert(
       "Nomor peserta tidak ditemukan."
     );
-
 
     return;
 
@@ -1154,18 +1522,10 @@ function registrasiPeserta() {
   }
 
 
-  // Cegah klik berulang
   button.disabled = true;
-
 
   button.textContent =
     "⏳ MEMPROSES...";
-
-
-  console.log(
-    "Registrasi peserta:",
-    nomorPesertaAktif
-  );
 
 
   fetch(
@@ -1182,7 +1542,6 @@ function registrasiPeserta() {
 
 
   .then(function(response) {
-
 
     if (!response.ok) {
 
@@ -1201,7 +1560,6 @@ function registrasiPeserta() {
 
   .then(function(data) {
 
-
     console.log(
       "Respons registrasi:",
       data
@@ -1211,7 +1569,6 @@ function registrasiPeserta() {
     if (data.success) {
 
 
-      // Ubah status di layar
       const status =
         document.getElementById(
           "statusRegistrasi"
@@ -1229,7 +1586,6 @@ function registrasiPeserta() {
       }
 
 
-      // Ubah tombol
       button.textContent =
         "✅ REGISTRASI BERHASIL";
 
@@ -1237,7 +1593,6 @@ function registrasiPeserta() {
       button.disabled = true;
 
 
-      // Tampilkan waktu
       const waktuLama =
         document.querySelector(
           ".waktu"
@@ -1256,50 +1611,9 @@ function registrasiPeserta() {
 
         `;
 
-      } else {
-
-
-        const dataContainer =
-          document.querySelector(
-            ".data"
-          );
-
-
-        if (dataContainer) {
-
-
-          const div =
-            document.createElement(
-              "div"
-            );
-
-
-          div.className =
-            "waktu";
-
-
-          div.innerHTML = `
-
-            Waktu Registrasi:<br>
-
-            <strong>
-              ${data.waktu}
-            </strong>
-
-          `;
-
-
-          dataContainer.insertBefore(
-            div,
-            button
-          );
-
-        }
-
       }
 
 
-      // Notifikasi
       alert(
 
         "✅ REGISTRASI BERHASIL!\n\n" +
@@ -1316,12 +1630,12 @@ function registrasiPeserta() {
       );
 
 
-    } else {
+    }
+
+    else {
 
 
-      // Registrasi gagal
       button.disabled = false;
-
 
       button.textContent =
         "✅ REGISTRASI PESERTA";
@@ -1331,19 +1645,19 @@ function registrasiPeserta() {
 
         "❌ REGISTRASI GAGAL\n\n" +
 
-        (data.message ||
-        "Terjadi kesalahan.")
+        (
+          data.message ||
+          "Terjadi kesalahan."
+        )
 
       );
 
     }
 
-
   })
 
 
   .catch(function(error) {
-
 
     console.error(
       "Error registrasi:",
@@ -1352,7 +1666,6 @@ function registrasiPeserta() {
 
 
     button.disabled = false;
-
 
     button.textContent =
       "✅ REGISTRASI PESERTA";
@@ -1371,46 +1684,54 @@ function registrasiPeserta() {
 }
 
 
-
 // =====================================================
-// SCAN PESERTA BERIKUTNYA
+// KEMBALI KE MENU
 // =====================================================
 
-function scanPesertaBerikutnya() {
+function kembaliKeMenu() {
+
+  // Hentikan kamera jika masih aktif
+
+  if (scanner) {
+
+    scanner.stop()
+
+      .catch(function() {});
+
+    scanner = null;
+
+  }
 
 
-  // Bersihkan hasil
-  document.getElementById(
-    "hasil"
-  ).style.display = "none";
+  document.getElementById("reader")
+    .innerHTML = "";
 
 
-  document.getElementById(
-    "hasil"
-  ).innerHTML = "";
+  document.getElementById("hasil")
+    .style.display = "none";
 
 
-  // Bersihkan reader
-  document.getElementById(
-    "reader"
-  ).innerHTML = "";
+  document.getElementById("hasil")
+    .innerHTML = "";
 
 
-  // Reset variabel
-  scanner = null;
+  document.getElementById("pencarian")
+    .style.display = "none";
+
+
+  document.getElementById("hasilPencarian")
+    .innerHTML = "";
+
+
+  document.getElementById("menuUtama")
+    .style.display = "block";
+
 
   sudahScan = false;
 
   nomorPesertaAktif = "";
 
-
-  // Tampilkan tombol scan
-  document.getElementById(
-    "mulaiButton"
-  ).style.display = "block";
-
 }
-
 
 
 // =====================================================
@@ -1423,7 +1744,6 @@ function onScanFailure(error) {
   // Scanner akan terus mencari QR.
 
 }
-
 
 </script>
 
