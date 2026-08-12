@@ -388,27 +388,17 @@ function mulaiScanner() {
 function onScanSuccess(decodedText, decodedResult) {
 
   if (sudahScan) {
-
     return;
-
   }
-
 
   sudahScan = true;
 
+  const nomor = decodedText.trim();
 
-  nomorPesertaAktif =
-    decodedText.trim();
+  document.getElementById("nomorQR").textContent = nomor;
+  document.getElementById("hasil").style.display = "block";
 
-
-  document.getElementById("nomorQR").textContent =
-    nomorPesertaAktif;
-
-
-  document.getElementById("hasil").style.display =
-    "block";
-
-
+  // Hentikan scanner
   if (scanner) {
 
     scanner.stop().then(function() {
@@ -417,15 +407,127 @@ function onScanSuccess(decodedText, decodedResult) {
 
     }).catch(function(error) {
 
-      console.log(
-        "Gagal menghentikan scanner:",
-        error
-      );
+      console.log("Gagal menghentikan scanner:", error);
 
     });
 
   }
 
+  // Tampilkan proses pencarian
+  document.getElementById("hasil").innerHTML = `
+    <div class="success">
+      🔍 MENCARI DATA PESERTA...
+    </div>
+
+    <div class="nomor">
+      ${nomor}
+    </div>
+  `;
+
+  // Panggil API Google Apps Script
+  fetch(
+    API_URL +
+    "?action=cek&nomor=" +
+    encodeURIComponent(nomor)
+  )
+
+  .then(function(response) {
+    return response.json();
+  })
+
+  .then(function(data) {
+
+    console.log("Respons API:", data);
+
+    if (data.success && data.ditemukan) {
+
+      const peserta = data.peserta;
+
+      document.getElementById("hasil").innerHTML = `
+
+        <div class="success">
+          ✅ PESERTA DITEMUKAN
+        </div>
+
+        <div style="
+          text-align:left;
+          margin-top:20px;
+          line-height:1.8;
+        ">
+
+          <b>Nomor Peserta</b><br>
+          ${peserta.nomor}<br><br>
+
+          <b>Nama Peserta</b><br>
+          ${peserta.nama}<br><br>
+
+          <b>Usia</b><br>
+          ${peserta.usia}<br><br>
+
+          <b>Kategori</b><br>
+          ${peserta.kategori}<br><br>
+
+          <b>Status Pembayaran</b><br>
+          ${peserta.statusPembayaran}<br><br>
+
+          <b>Status Registrasi</b><br>
+          ${peserta.statusRegistrasi}<br><br>
+
+          <b>Waktu Registrasi</b><br>
+          ${peserta.waktuRegistrasi || "-"}
+        </div>
+
+      `;
+
+    } else {
+
+      document.getElementById("hasil").innerHTML = `
+
+        <div style="
+          background:#fdeaea;
+          color:#9b1c18;
+          padding:15px;
+          border-radius:10px;
+          font-weight:bold;
+        ">
+          ❌ PESERTA TIDAK DITEMUKAN
+        </div>
+
+        <div class="nomor">
+          ${nomor}
+        </div>
+
+      `;
+
+    }
+
+  })
+
+  .catch(function(error) {
+
+    console.error("Error API:", error);
+
+    document.getElementById("hasil").innerHTML = `
+
+      <div style="
+        background:#fdeaea;
+        color:#9b1c18;
+        padding:15px;
+        border-radius:10px;
+        font-weight:bold;
+      ">
+        ❌ GAGAL MENGHUBUNGI SERVER
+      </div>
+
+      <div style="margin-top:15px;">
+        Nomor QR: <b>${nomor}</b>
+      </div>
+
+    `;
+
+  });
+
+}
 
   // Ambil data peserta
 
