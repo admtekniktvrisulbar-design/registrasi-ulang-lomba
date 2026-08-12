@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-  <title>Test Scanner QR</title>
+  <title>Registrasi Ulang Lomba</title>
 
-  <script src="https://unpkg.com/html5-qrcode"
-          type="text/javascript"></script>
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript">
+  </script>
+
 
   <style>
+
     * {
       box-sizing: border-box;
     }
+
 
     body {
       font-family: Arial, sans-serif;
@@ -24,20 +31,25 @@
       text-align: center;
     }
 
+
     .container {
       max-width: 500px;
       margin: auto;
     }
+
 
     h1 {
       color: #062b78;
       margin-bottom: 5px;
     }
 
+
     .subtitle {
       color: #555;
       margin-bottom: 25px;
+      font-size: 18px;
     }
+
 
     button {
       width: 100%;
@@ -49,7 +61,15 @@
       cursor: pointer;
       background: #0b3d91;
       color: white;
+      margin-top: 10px;
     }
+
+
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
 
     #reader {
       background: white;
@@ -58,6 +78,7 @@
       margin-top: 20px;
     }
 
+
     #hasil {
       display: none;
       background: white;
@@ -65,7 +86,9 @@
       border-radius: 15px;
       margin-top: 20px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+      text-align: left;
     }
+
 
     .success {
       background: #e8f8ed;
@@ -74,49 +97,272 @@
       padding: 15px;
       border-radius: 10px;
       font-weight: bold;
+      text-align: center;
     }
 
+
+    .error {
+      background: #fdeaea;
+      border: 1px solid #e58b87;
+      color: #9b1c18;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+    }
+
+
     .nomor {
-      font-size: 22px;
+      font-size: 24px;
+      margin: 20px 0;
+      font-weight: bold;
+      text-align: center;
+      color: #062b78;
+    }
+
+
+    .data {
       margin-top: 15px;
+    }
+
+
+    .row {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+
+    .label {
+      font-size: 13px;
+      color: #777;
+    }
+
+
+    .value {
+      font-size: 17px;
+      font-weight: bold;
+      color: #222;
+      margin-top: 3px;
+    }
+
+
+    .status {
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 5px;
       font-weight: bold;
     }
+
+
+    .status-lunas {
+      background: #e8f8ed;
+      color: #176b2b;
+    }
+
+
+    .status-belum {
+      background: #fff4d6;
+      color: #8a5a00;
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-  <h1>TEST SCANNER QR</h1>
+
+  <h1>
+    REGISTRASI ULANG
+  </h1>
+
 
   <div class="subtitle">
-    Registrasi Ulang Lomba<br>
+
+    Lomba Mewarnai & Menggambar
+    <br>
     TVRI Sulawesi Barat
+
   </div>
 
-  <button id="mulaiButton" onclick="mulaiScanner()">
+
+  <!-- TOMBOL MULAI SCAN -->
+
+  <button
+    id="mulaiButton"
+    onclick="mulaiScanner()">
+
     📷 MULAI SCAN QR CODE
+
   </button>
+
+
+  <!-- TEMPAT KAMERA -->
 
   <div id="reader"></div>
 
+
+  <!-- HASIL -->
+
   <div id="hasil">
-    <div class="success">
-      ✅ QR CODE BERHASIL DIBACA
+
+
+    <div
+      class="success"
+      id="judulHasil">
+
+      🔍 MENCARI DATA PESERTA...
+
     </div>
 
-    <div class="nomor" id="nomorQR"></div>
+
+    <div
+      class="nomor"
+      id="nomorQR">
+    </div>
+
+
+    <div
+      id="loading"
+      class="loading">
+
+      Menghubungi database peserta...
+
+    </div>
+
+
+    <!-- DATA PESERTA -->
+
+    <div
+      id="dataPeserta"
+      class="data"
+      style="display:none;">
+
+
+      <div class="row">
+
+        <div class="label">
+          Nama Peserta
+        </div>
+
+        <div
+          class="value"
+          id="namaPeserta">
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Usia
+        </div>
+
+        <div
+          class="value"
+          id="usiaPeserta">
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Nama Orang Tua
+        </div>
+
+        <div
+          class="value"
+          id="orangTua">
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Kategori
+        </div>
+
+        <div
+          class="value"
+          id="kategoriPeserta">
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Status Pembayaran
+        </div>
+
+        <div
+          id="statusPembayaran"
+          class="status">
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Status Registrasi
+        </div>
+
+        <div
+          id="statusRegistrasi"
+          class="status">
+        </div>
+
+      </div>
+
+
+    </div>
+
+
   </div>
+
 
 </div>
 
+
 <script>
 
-let scanner = null;
-let sudahScan = false;
+
+// =====================================================
+// KONFIGURASI API
+// =====================================================
+
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyCnvBr41uRfF8FUt-ZmbeF1j7pcazsqBvnSVLkreITP1YYK7ZIvmwlhkFJA1Px9qso/exec";
+
+
+// =====================================================
+// VARIABEL
+// =====================================================
+
+let scanner = null;
+
+let sudahScan = false;
+
 
 // =====================================================
 // MULAI SCANNER
@@ -124,20 +370,39 @@ const API_URL =
 
 function mulaiScanner() {
 
-  document.getElementById("mulaiButton").style.display = "none";
+  document.getElementById("mulaiButton")
+    .style.display = "none";
 
-  scanner = new Html5Qrcode("reader");
+
+  document.getElementById("hasil")
+    .style.display = "none";
+
+
+  document.getElementById("reader")
+    .innerHTML = "";
+
+
+  sudahScan = false;
+
+
+  scanner =
+    new Html5Qrcode("reader");
+
 
   const config = {
+
     fps: 10,
 
     qrbox: {
       width: 250,
       height: 250
     }
+
   };
 
+
   scanner.start(
+
     {
       facingMode: "environment"
     },
@@ -148,21 +413,30 @@ function mulaiScanner() {
 
     onScanFailure
 
-  ).catch(function(error) {
+  )
 
-    document.getElementById("reader").innerHTML = `
-      <div style="
-        background:#fdeaea;
-        color:#9b1c18;
-        padding:15px;
-        border-radius:10px;
-        margin-top:10px;
-      ">
-        <b>❌ KAMERA TIDAK DAPAT DIAKSES</b>
-        <br><br>
-        ${error}
-      </div>
-    `;
+  .catch(function(error) {
+
+    document.getElementById("reader")
+      .innerHTML = `
+
+        <div class="error">
+
+          <b>
+            ❌ KAMERA TIDAK DAPAT DIAKSES
+          </b>
+
+          <br><br>
+
+          ${error}
+
+        </div>
+
+      `;
+
+
+    document.getElementById("mulaiButton")
+      .style.display = "block";
 
   });
 
@@ -173,32 +447,286 @@ function mulaiScanner() {
 // QR BERHASIL DIBACA
 // =====================================================
 
-function onScanSuccess(decodedText, decodedResult) {
+function onScanSuccess(decodedText) {
+
 
   if (sudahScan) {
     return;
   }
 
+
   sudahScan = true;
 
-  document.getElementById("nomorQR").textContent =
+
+  const nomor =
     decodedText.trim();
 
-  document.getElementById("hasil").style.display = "block";
+
+  // Tampilkan hasil
+
+  document.getElementById("hasil")
+    .style.display = "block";
+
+
+  document.getElementById("nomorQR")
+    .textContent = nomor;
+
+
+  document.getElementById("judulHasil")
+    .textContent =
+    "🔍 MENCARI DATA PESERTA...";
+
+
+  document.getElementById("loading")
+    .style.display = "block";
+
+
+  document.getElementById("dataPeserta")
+    .style.display = "none";
+
+
+  // Hentikan scanner
 
   if (scanner) {
 
-    scanner.stop().then(function() {
+    scanner.stop()
+      .then(function() {
 
-      console.log("Scanner dihentikan.");
+        console.log(
+          "Scanner dihentikan."
+        );
 
-    }).catch(function(error) {
+      })
+      .catch(function(error) {
 
-      console.log("Gagal menghentikan scanner:", error);
+        console.log(
+          "Gagal menghentikan scanner:",
+          error
+        );
 
-    });
+      });
 
   }
+
+
+  // ===================================================
+  // PANGGIL API
+  // ===================================================
+
+  const url =
+    API_URL +
+    "?action=cek&nomor=" +
+    encodeURIComponent(nomor);
+
+
+  console.log(
+    "Memanggil API:",
+    url
+  );
+
+
+  fetch(url)
+
+    .then(function(response) {
+
+      if (!response.ok) {
+
+        throw new Error(
+          "HTTP Error: " +
+          response.status
+        );
+
+      }
+
+      return response.json();
+
+    })
+
+
+    .then(function(data) {
+
+      console.log(
+        "Respons API:",
+        data
+      );
+
+
+      document.getElementById("loading")
+        .style.display = "none";
+
+
+      // =================================================
+      // PESERTA DITEMUKAN
+      // =================================================
+
+      if (
+        data.success &&
+        data.ditemukan &&
+        data.peserta
+      ) {
+
+
+        const peserta =
+          data.peserta;
+
+
+        document.getElementById(
+          "judulHasil"
+        ).textContent =
+          "✅ PESERTA DITEMUKAN";
+
+
+        document.getElementById(
+          "namaPeserta"
+        ).textContent =
+          peserta.nama || "-";
+
+
+        document.getElementById(
+          "usiaPeserta"
+        ).textContent =
+          peserta.usia || "-";
+
+
+        document.getElementById(
+          "orangTua"
+        ).textContent =
+          peserta.orangtua || "-";
+
+
+        document.getElementById(
+          "kategoriPeserta"
+        ).textContent =
+          peserta.kategori || "-";
+
+
+        // STATUS PEMBAYARAN
+
+        const statusBayar =
+          document.getElementById(
+            "statusPembayaran"
+          );
+
+
+        statusBayar.textContent =
+          peserta.statusPembayaran || "-";
+
+
+        if (
+          peserta.statusPembayaran
+            .toLowerCase() === "lunas"
+        ) {
+
+          statusBayar.className =
+            "status status-lunas";
+
+        } else {
+
+          statusBayar.className =
+            "status status-belum";
+
+        }
+
+
+        // STATUS REGISTRASI
+
+        const statusReg =
+          document.getElementById(
+            "statusRegistrasi"
+          );
+
+
+        statusReg.textContent =
+          peserta.statusRegistrasi || "Belum Registrasi";
+
+
+        if (
+          peserta.statusRegistrasi ===
+          "Sudah Registrasi"
+        ) {
+
+          statusReg.className =
+            "status status-belum";
+
+        } else {
+
+          statusReg.className =
+            "status status-lunas";
+
+        }
+
+
+        // Tampilkan data
+
+        document.getElementById(
+          "dataPeserta"
+        ).style.display = "block";
+
+
+      }
+
+
+      // =================================================
+      // PESERTA TIDAK DITEMUKAN
+      // =================================================
+
+      else {
+
+
+        document.getElementById(
+          "judulHasil"
+        ).textContent =
+          "❌ PESERTA TIDAK DITEMUKAN";
+
+
+        document.getElementById(
+          "judulHasil"
+        ).className =
+          "error";
+
+
+        document.getElementById(
+          "loading"
+        ).style.display = "none";
+
+
+      }
+
+    })
+
+
+    .catch(function(error) {
+
+
+      console.error(
+        "Error API:",
+        error
+      );
+
+
+      document.getElementById(
+        "loading"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "judulHasil"
+      ).textContent =
+        "❌ GAGAL MENGHUBUNGI SERVER";
+
+
+      document.getElementById(
+        "judulHasil"
+      ).className =
+        "error";
+
+
+      document.getElementById(
+        "dataPeserta"
+      ).style.display = "none";
+
+
+    });
 
 }
 
@@ -209,13 +737,15 @@ function onScanSuccess(decodedText, decodedResult) {
 
 function onScanFailure(error) {
 
-  // Tidak perlu menampilkan error
-  // karena fungsi ini dipanggil terus-menerus
-  // selama kamera mencari QR.
-  
+  // Tidak melakukan apa-apa.
+  // Scanner terus mencari QR.
+
 }
+
 
 </script>
 
+
 </body>
+
 </html>
