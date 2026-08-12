@@ -96,10 +96,6 @@
       color: #062b78;
     }
 
-    .data {
-      margin-top: 15px;
-    }
-
     .row {
       padding: 10px 0;
       border-bottom: 1px solid #eee;
@@ -123,16 +119,6 @@
       text-align: center;
       margin-top: 10px;
       font-weight: bold;
-    }
-
-    .status-lunas {
-      background: #e8f8ed;
-      color: #176b2b;
-    }
-
-    .status-belum {
-      background: #fff4d6;
-      color: #8a5a00;
     }
 
     .error {
@@ -181,117 +167,6 @@
 
   <div id="hasil">
 
-    <div class="success">
-
-      ✅ QR CODE BERHASIL DIBACA
-
-    </div>
-
-
-    <div class="nomor"
-         id="nomorQR">
-    </div>
-
-
-    <div id="loading"
-         class="loading">
-
-      🔄 Mencari data peserta...
-
-    </div>
-
-
-    <div id="dataPeserta"
-         class="data"
-         style="display:none;">
-
-      <div class="row">
-
-        <div class="label">
-          Nama Peserta
-        </div>
-
-        <div class="value"
-             id="namaPeserta">
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-          Usia
-        </div>
-
-        <div class="value"
-             id="usiaPeserta">
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-          Kategori
-        </div>
-
-        <div class="value"
-             id="kategoriPeserta">
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-          Nama Orang Tua
-        </div>
-
-        <div class="value"
-             id="orangTua">
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-          Status Pembayaran
-        </div>
-
-        <div id="statusPembayaran"
-             class="status">
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-          Status Registrasi
-        </div>
-
-        <div id="statusRegistrasi"
-             class="status">
-        </div>
-
-      </div>
-
-
-      <button id="registrasiButton"
-              onclick="registrasiPeserta()">
-
-        ✅ REGISTRASI PESERTA
-
-      </button>
-
-    </div>
-
   </div>
 
 </div>
@@ -301,10 +176,8 @@
 
 
 // =====================================================
-// KONFIGURASI
+// KONFIGURASI API
 // =====================================================
-
-// NANTI KITA ISI DENGAN URL WEB APP GOOGLE APPS SCRIPT
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbyMWx_Hi3Ka_nzOgbzNCI3MwuSlmptj_hyKtUj1QtsZzrKyHiPICPgeWZFm_dobDG4m/exec";
@@ -362,6 +235,8 @@ function mulaiScanner() {
 
   ).catch(function(error) {
 
+    document.getElementById("mulaiButton").style.display = "block";
+
     document.getElementById("reader").innerHTML = `
 
       <div class="error">
@@ -393,55 +268,80 @@ function onScanSuccess(decodedText, decodedResult) {
 
   sudahScan = true;
 
-  const nomor = decodedText.trim();
+  nomorPesertaAktif = decodedText.trim();
 
-  document.getElementById("nomorQR").textContent = nomor;
-  document.getElementById("hasil").style.display = "block";
 
   // Hentikan scanner
+
   if (scanner) {
 
-    scanner.stop().then(function() {
+    scanner.stop().catch(function(error) {
 
-      console.log("Scanner dihentikan.");
-
-    }).catch(function(error) {
-
-      console.log("Gagal menghentikan scanner:", error);
+      console.log(
+        "Gagal menghentikan scanner:",
+        error
+      );
 
     });
 
   }
 
-  // Tampilkan proses pencarian
+
+  // Tampilkan loading
+
+  document.getElementById("hasil").style.display = "block";
+
   document.getElementById("hasil").innerHTML = `
+
     <div class="success">
       🔍 MENCARI DATA PESERTA...
     </div>
 
     <div class="nomor">
-      ${nomor}
+      ${nomorPesertaAktif}
     </div>
+
+    <div class="loading">
+      Mohon tunggu...
+    </div>
+
   `;
 
-  // Panggil API Google Apps Script
+
+  // ===================================================
+  // PANGGIL GOOGLE APPS SCRIPT
+  // ===================================================
+
   fetch(
+
     API_URL +
     "?action=cek&nomor=" +
-    encodeURIComponent(nomor)
+    encodeURIComponent(nomorPesertaAktif)
+
   )
 
   .then(function(response) {
+
     return response.json();
+
   })
 
   .then(function(data) {
 
-    console.log("Respons API:", data);
+    console.log(
+      "Respons API:",
+      data
+    );
 
-    if (data.success && data.ditemukan) {
 
-      const peserta = data.peserta;
+    if (
+      data.success &&
+      data.ditemukan
+    ) {
+
+      const peserta =
+        data.peserta;
+
 
       document.getElementById("hasil").innerHTML = `
 
@@ -449,52 +349,129 @@ function onScanSuccess(decodedText, decodedResult) {
           ✅ PESERTA DITEMUKAN
         </div>
 
-        <div style="
-          text-align:left;
-          margin-top:20px;
-          line-height:1.8;
-        ">
 
-          <b>Nomor Peserta</b><br>
-          ${peserta.nomor}<br><br>
+        <div class="row">
 
-          <b>Nama Peserta</b><br>
-          ${peserta.nama}<br><br>
+          <div class="label">
+            Nomor Peserta
+          </div>
 
-          <b>Usia</b><br>
-          ${peserta.usia}<br><br>
+          <div class="value">
+            ${peserta.nomor}
+          </div>
 
-          <b>Kategori</b><br>
-          ${peserta.kategori}<br><br>
+        </div>
 
-          <b>Status Pembayaran</b><br>
-          ${peserta.statusPembayaran}<br><br>
 
-          <b>Status Registrasi</b><br>
-          ${peserta.statusRegistrasi}<br><br>
+        <div class="row">
 
-          <b>Waktu Registrasi</b><br>
-          ${peserta.waktuRegistrasi || "-"}
+          <div class="label">
+            Nama Peserta
+          </div>
+
+          <div class="value">
+            ${peserta.nama}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Usia
+          </div>
+
+          <div class="value">
+            ${peserta.usia}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Kategori
+          </div>
+
+          <div class="value">
+            ${peserta.kategori}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Nama Orang Tua
+          </div>
+
+          <div class="value">
+            ${peserta.orangtua}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Status Pembayaran
+          </div>
+
+          <div class="value">
+            ${peserta.statusPembayaran}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Status Registrasi
+          </div>
+
+          <div class="value">
+            ${peserta.statusRegistrasi}
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Waktu Registrasi
+          </div>
+
+          <div class="value">
+            ${peserta.waktuRegistrasi || "-"}
+          </div>
+
         </div>
 
       `;
 
+
     } else {
+
 
       document.getElementById("hasil").innerHTML = `
 
-        <div style="
-          background:#fdeaea;
-          color:#9b1c18;
-          padding:15px;
-          border-radius:10px;
-          font-weight:bold;
-        ">
+        <div class="error">
+
           ❌ PESERTA TIDAK DITEMUKAN
+
         </div>
 
+
         <div class="nomor">
-          ${nomor}
+
+          ${nomorPesertaAktif}
+
         </div>
 
       `;
@@ -503,93 +480,30 @@ function onScanSuccess(decodedText, decodedResult) {
 
   })
 
+
   .catch(function(error) {
 
-    console.error("Error API:", error);
+    console.error(
+      "Error API:",
+      error
+    );
+
 
     document.getElementById("hasil").innerHTML = `
 
-      <div style="
-        background:#fdeaea;
-        color:#9b1c18;
-        padding:15px;
-        border-radius:10px;
-        font-weight:bold;
-      ">
-        ❌ GAGAL MENGHUBUNGI SERVER
-      </div>
+      <div class="error">
 
-      <div style="margin-top:15px;">
-        Nomor QR: <b>${nomor}</b>
+        ❌ GAGAL MENGHUBUNGI SERVER
+
+        <br><br>
+
+        ${error.message}
+
       </div>
 
     `;
 
   });
-
-}
-
-  // Ambil data peserta
-
-  cekPeserta(nomorPesertaAktif);
-
-}
-
-
-// =====================================================
-// CEK PESERTA
-// =====================================================
-
-function cekPeserta(nomor) {
-
-  document.getElementById("loading").style.display =
-    "block";
-
-  document.getElementById("dataPeserta").style.display =
-    "none";
-
-
-  // Untuk sementara kita siapkan struktur
-  // pemanggilan API.
-  //
-  // Setelah API.gs selesai kita hubungkan,
-  // bagian ini akan mengambil data dari Google Sheets.
-
-
-  console.log(
-    "Mencari peserta:",
-    nomor
-  );
-
-}
-
-
-// =====================================================
-// REGISTRASI PESERTA
-// =====================================================
-
-function registrasiPeserta() {
-
-  const button =
-    document.getElementById("registrasiButton");
-
-
-  button.disabled = true;
-
-  button.textContent =
-    "⏳ MEMPROSES...";
-
-
-  console.log(
-    "Registrasi:",
-    nomorPesertaAktif
-  );
-
-
-  // Pemanggilan API registrasi
-  // akan kita aktifkan setelah API.gs
-  // selesai kita sesuaikan.
-
 
 }
 
@@ -600,7 +514,7 @@ function registrasiPeserta() {
 
 function onScanFailure(error) {
 
-  // Tidak perlu menampilkan error.
+  // Tidak menampilkan error.
   // Scanner akan terus mencari QR.
 
 }
