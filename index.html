@@ -919,10 +919,18 @@ function el(id) {
 // =====================================================
 // FORMAT WAKTU
 // =====================================================
+// Fungsi ini menangani beberapa kemungkinan format waktu
+// yang dikirim oleh Google Apps Script / Google Sheets.
+// =====================================================
 
 function formatWaktu(waktu) {
 
-  if (!waktu) {
+  // Jika kosong, jangan tampilkan apa pun
+  if (
+    waktu === null ||
+    waktu === undefined ||
+    waktu === ""
+  ) {
 
     return "";
 
@@ -931,20 +939,273 @@ function formatWaktu(waktu) {
 
   try {
 
-    const tanggal =
-      new Date(waktu);
+    let tanggal;
 
+
+    // ===================================================
+    // 1. JIKA DATA BERUPA OBJECT DATE
+    // ===================================================
 
     if (
+      waktu instanceof Date
+    ) {
+
+      tanggal = waktu;
+
+    }
+
+
+    // ===================================================
+    // 2. JIKA DATA BERUPA ANGKA
+    // ===================================================
+
+    else if (
+      typeof waktu === "number"
+    ) {
+
+      /*
+       * Google Sheets menggunakan serial date.
+       *
+       * Jika angkanya sangat besar, kemungkinan
+       * merupakan Unix timestamp dalam milidetik.
+       *
+       * Jika angkanya kecil, kemungkinan merupakan
+       * serial date Google Sheets.
+       */
+
+      if (
+        waktu > 100000000000
+      ) {
+
+        // Unix timestamp milliseconds
+
+        tanggal =
+          new Date(waktu);
+
+      }
+
+      else if (
+        waktu > 1000000000
+      ) {
+
+        // Unix timestamp seconds
+
+        tanggal =
+          new Date(
+            waktu * 1000
+          );
+
+      }
+
+      else {
+
+        // Google Sheets serial date
+        //
+        // 25569 = 1 Januari 1970
+        // 86400000 = jumlah milidetik dalam 1 hari
+
+        tanggal =
+          new Date(
+            (
+              waktu - 25569
+            ) *
+            86400000
+          );
+
+      }
+
+    }
+
+
+    // ===================================================
+    // 3. JIKA DATA BERUPA STRING
+    // ===================================================
+
+    else {
+
+      const nilai =
+        String(waktu).trim();
+
+
+      // -----------------------------------------------
+      // Format ISO
+      // Contoh:
+      // 2026-08-13T19:24:40.000Z
+      // -----------------------------------------------
+
+      if (
+        /^\d{4}-\d{2}-\d{2}T/.test(
+          nilai
+        )
+      ) {
+
+        tanggal =
+          new Date(nilai);
+
+      }
+
+
+      // -----------------------------------------------
+      // Format:
+      // 2026-08-13 19:24:40
+      // -----------------------------------------------
+
+      else if (
+        /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}/.test(
+          nilai
+        )
+      ) {
+
+        const bagian =
+          nilai.split(/\s+/);
+
+        const tanggalBagian =
+          bagian[0].split("-");
+
+        const waktuBagian =
+          (
+            bagian[1] ||
+            "00:00:00"
+          ).split(":");
+
+
+        tanggal =
+          new Date(
+
+            Number(
+              tanggalBagian[0]
+            ),
+
+            Number(
+              tanggalBagian[1]
+            ) - 1,
+
+            Number(
+              tanggalBagian[2]
+            ),
+
+            Number(
+              waktuBagian[0]
+            ),
+
+            Number(
+              waktuBagian[1]
+            ),
+
+            Number(
+              waktuBagian[2] || 0
+            )
+
+          );
+
+      }
+
+
+      // -----------------------------------------------
+      // Format Indonesia:
+      //
+      // 13/08/2026 19:24:40
+      // 13/08/2026, 19:24:40
+      // -----------------------------------------------
+
+      else if (
+        /^\d{2}\/\d{2}\/\d{4}/.test(
+          nilai
+        )
+      ) {
+
+        const bersih =
+          nilai.replace(
+            ",",
+            " "
+          );
+
+
+        const bagian =
+          bersih.split(/\s+/);
+
+
+        const tanggalBagian =
+          bagian[0].split("/");
+
+
+        const waktuBagian =
+          (
+            bagian[1] ||
+            "00:00:00"
+          ).split(":");
+
+
+        tanggal =
+          new Date(
+
+            Number(
+              tanggalBagian[2]
+            ),
+
+            Number(
+              tanggalBagian[1]
+            ) - 1,
+
+            Number(
+              tanggalBagian[0]
+            ),
+
+            Number(
+              waktuBagian[0]
+            ),
+
+            Number(
+              waktuBagian[1]
+            ),
+
+            Number(
+              waktuBagian[2] || 0
+            )
+
+          );
+
+      }
+
+
+      // -----------------------------------------------
+      // Coba parser standar sebagai cadangan
+      // -----------------------------------------------
+
+      else {
+
+        tanggal =
+          new Date(nilai);
+
+      }
+
+    }
+
+
+    // ===================================================
+    // VALIDASI
+    // ===================================================
+
+    if (
+      !tanggal ||
       isNaN(
         tanggal.getTime()
       )
     ) {
 
-      return waktu;
+      console.warn(
+        "Format waktu tidak dikenali:",
+        waktu
+      );
+
+      return String(waktu);
 
     }
 
+
+    // ===================================================
+    // FORMAT AKHIR
+    // ===================================================
 
     return tanggal.toLocaleString(
 
@@ -984,13 +1245,18 @@ function formatWaktu(waktu) {
 
   catch (error) {
 
-    return waktu;
+    console.error(
+      "Gagal memformat waktu:",
+      waktu,
+      error
+    );
+
+
+    return String(waktu);
 
   }
 
 }
-
-
 // =====================================================
 // HENTIKAN SCANNER DENGAN AMAN
 // =====================================================
