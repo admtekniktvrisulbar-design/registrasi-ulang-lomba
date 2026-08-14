@@ -45,13 +45,17 @@
       background:
         #f4f7fb;
 
-      margin: 0;
+      margin:
+        0;
 
-      padding: 20px;
+      padding:
+        20px;
 
-      text-align: center;
+      text-align:
+        center;
 
-      color: #222;
+      color:
+        #222;
 
     }
 
@@ -62,11 +66,14 @@
 
     .container {
 
-      width: 100%;
+      width:
+        100%;
 
-      max-width: 500px;
+      max-width:
+        500px;
 
-      margin: auto;
+      margin:
+        auto;
 
     }
 
@@ -81,7 +88,6 @@
         #062b78;
 
       margin:
-
         0 0 5px 0;
 
       font-size:
@@ -487,7 +493,7 @@
 
 
     /* =====================================================
-       NOMOR PESERTA
+       NOMOR / ID PESERTA
        ===================================================== */
 
     .nomor {
@@ -506,6 +512,36 @@
 
       color:
         #062b78;
+
+      word-break:
+        break-word;
+
+    }
+
+
+    /* =====================================================
+       LABEL NOMOR
+       ===================================================== */
+
+    .nomor-label {
+
+      text-align:
+        center;
+
+      color:
+        #777;
+
+      font-size:
+        14px;
+
+      font-weight:
+        normal;
+
+      margin-top:
+        18px;
+
+      margin-bottom:
+        -12px;
 
     }
 
@@ -560,6 +596,9 @@
 
       line-height:
         1.4;
+
+      word-break:
+        break-word;
 
     }
 
@@ -700,6 +739,64 @@
 
 
     /* =====================================================
+       NOMOR SETELAH REGISTRASI
+       ===================================================== */
+
+    .nomor-registrasi {
+
+      text-align:
+        center;
+
+      margin:
+        20px 0;
+
+      padding:
+        15px;
+
+      background:
+        #eef4ff;
+
+      border:
+        1px solid #b8cdf5;
+
+      border-radius:
+        12px;
+
+    }
+
+
+    .nomor-registrasi-label {
+
+      color:
+        #666;
+
+      font-size:
+        14px;
+
+      margin-bottom:
+        5px;
+
+    }
+
+
+    .nomor-registrasi-value {
+
+      color:
+        #062b78;
+
+      font-size:
+        30px;
+
+      font-weight:
+        bold;
+
+      word-break:
+        break-word;
+
+    }
+
+
+    /* =====================================================
        RESPONSIVE
        ===================================================== */
 
@@ -733,6 +830,14 @@
 
         font-size:
           26px;
+
+      }
+
+
+      .nomor-registrasi-value {
+
+        font-size:
+          27px;
 
       }
 
@@ -828,7 +933,8 @@
         line-height:1.5;
       ">
 
-      Masukkan nama atau nomor peserta
+      Masukkan ID Peserta, nomor peserta,
+      atau nama peserta
 
     </div>
 
@@ -837,7 +943,7 @@
       id="inputPencarian"
       class="search-input"
       type="text"
-      placeholder="Contoh: MG1012-001 atau Putri">
+      placeholder="Contoh: MW46-001 atau Annisa">
 
 
     <button
@@ -896,7 +1002,27 @@ let scanner = null;
 
 let sudahScan = false;
 
-let nomorPesertaAktif = "";
+
+// =====================================================
+// PENTING
+// =====================================================
+//
+// Variabel ini SELALU menyimpan ID PESERTA.
+//
+// Contoh:
+// MW46-001
+//
+// BUKAN nomor peserta hasil registrasi.
+//
+// Nomor peserta seperti A-001 hanya digunakan
+// setelah API mengembalikannya ketika registrasi
+// berhasil.
+// =====================================================
+
+let idPesertaAktif = "";
+
+
+let nomorPesertaHasilRegistrasi = "";
 
 let hasilPesertaManual = [];
 
@@ -917,15 +1043,40 @@ function el(id) {
 
 
 // =====================================================
-// FORMAT WAKTU
+// ESCAPE HTML
 // =====================================================
-// Fungsi ini menangani beberapa kemungkinan format waktu
-// yang dikirim oleh Google Apps Script / Google Sheets.
+//
+// Mencegah data dari spreadsheet merusak HTML.
+// =====================================================
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+// =====================================================
+// FORMAT WAKTU
 // =====================================================
 
 function formatWaktu(waktu) {
 
-  // Jika kosong, jangan tampilkan apa pun
   if (
     waktu === null ||
     waktu === undefined ||
@@ -943,41 +1094,30 @@ function formatWaktu(waktu) {
 
 
     // ===================================================
-    // 1. JIKA DATA BERUPA OBJECT DATE
+    // 1. OBJECT DATE
     // ===================================================
 
     if (
       waktu instanceof Date
     ) {
 
-      tanggal = waktu;
+      tanggal =
+        waktu;
 
     }
 
 
     // ===================================================
-    // 2. JIKA DATA BERUPA ANGKA
+    // 2. ANGKA
     // ===================================================
 
     else if (
       typeof waktu === "number"
     ) {
 
-      /*
-       * Google Sheets menggunakan serial date.
-       *
-       * Jika angkanya sangat besar, kemungkinan
-       * merupakan Unix timestamp dalam milidetik.
-       *
-       * Jika angkanya kecil, kemungkinan merupakan
-       * serial date Google Sheets.
-       */
-
       if (
         waktu > 100000000000
       ) {
-
-        // Unix timestamp milliseconds
 
         tanggal =
           new Date(waktu);
@@ -988,8 +1128,6 @@ function formatWaktu(waktu) {
         waktu > 1000000000
       ) {
 
-        // Unix timestamp seconds
-
         tanggal =
           new Date(
             waktu * 1000
@@ -998,11 +1136,6 @@ function formatWaktu(waktu) {
       }
 
       else {
-
-        // Google Sheets serial date
-        //
-        // 25569 = 1 Januari 1970
-        // 86400000 = jumlah milidetik dalam 1 hari
 
         tanggal =
           new Date(
@@ -1018,7 +1151,7 @@ function formatWaktu(waktu) {
 
 
     // ===================================================
-    // 3. JIKA DATA BERUPA STRING
+    // 3. STRING
     // ===================================================
 
     else {
@@ -1027,11 +1160,7 @@ function formatWaktu(waktu) {
         String(waktu).trim();
 
 
-      // -----------------------------------------------
-      // Format ISO
-      // Contoh:
-      // 2026-08-13T19:24:40.000Z
-      // -----------------------------------------------
+      // ISO
 
       if (
         /^\d{4}-\d{2}-\d{2}T/.test(
@@ -1045,10 +1174,7 @@ function formatWaktu(waktu) {
       }
 
 
-      // -----------------------------------------------
-      // Format:
-      // 2026-08-13 19:24:40
-      // -----------------------------------------------
+      // YYYY-MM-DD HH:mm:ss
 
       else if (
         /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}/.test(
@@ -1101,12 +1227,7 @@ function formatWaktu(waktu) {
       }
 
 
-      // -----------------------------------------------
-      // Format Indonesia:
-      //
-      // 13/08/2026 19:24:40
-      // 13/08/2026, 19:24:40
-      // -----------------------------------------------
+      // DD/MM/YYYY HH:mm:ss
 
       else if (
         /^\d{2}\/\d{2}\/\d{4}/.test(
@@ -1168,10 +1289,6 @@ function formatWaktu(waktu) {
       }
 
 
-      // -----------------------------------------------
-      // Coba parser standar sebagai cadangan
-      // -----------------------------------------------
-
       else {
 
         tanggal =
@@ -1181,10 +1298,6 @@ function formatWaktu(waktu) {
 
     }
 
-
-    // ===================================================
-    // VALIDASI
-    // ===================================================
 
     if (
       !tanggal ||
@@ -1202,10 +1315,6 @@ function formatWaktu(waktu) {
 
     }
 
-
-    // ===================================================
-    // FORMAT AKHIR
-    // ===================================================
 
     return tanggal.toLocaleString(
 
@@ -1257,8 +1366,10 @@ function formatWaktu(waktu) {
   }
 
 }
+
+
 // =====================================================
-// HENTIKAN SCANNER DENGAN AMAN
+// HENTIKAN SCANNER
 // =====================================================
 
 async function hentikanScanner() {
@@ -1274,7 +1385,8 @@ async function hentikanScanner() {
     scanner;
 
 
-  scanner = null;
+  scanner =
+    null;
 
 
   try {
@@ -1286,7 +1398,7 @@ async function hentikanScanner() {
   catch (error) {
 
     console.log(
-      "Scanner sudah berhenti atau tidak aktif:",
+      "Scanner sudah berhenti:",
       error
     );
 
@@ -1312,16 +1424,19 @@ async function hentikanScanner() {
 
 
 // =====================================================
-// RESET SEMUA TAMPILAN
+// RESET TAMPILAN
 // =====================================================
 
 function resetTampilan() {
 
-  el("reader").innerHTML = "";
+  el("reader").innerHTML =
+    "";
 
-  el("hasil").innerHTML = "";
+  el("hasil").innerHTML =
+    "";
 
-  el("hasilPencarian").innerHTML = "";
+  el("hasilPencarian").innerHTML =
+    "";
 
 
   el("reader").style.display =
@@ -1341,15 +1456,23 @@ function resetTampilan() {
     "";
 
 
-  hasilPesertaManual = [];
+  hasilPesertaManual =
+    [];
 
-  nomorPesertaAktif = "";
+  idPesertaAktif =
+    "";
 
-  sudahScan = false;
+  nomorPesertaHasilRegistrasi =
+    "";
 
-  sedangMencari = false;
+  sudahScan =
+    false;
 
-  sedangRegistrasi = false;
+  sedangMencari =
+    false;
+
+  sedangRegistrasi =
+    false;
 
 }
 
@@ -1357,48 +1480,30 @@ function resetTampilan() {
 // =====================================================
 // KEMBALI KE MENU
 // =====================================================
-//
-// Fungsi ini sekarang menjadi satu-satunya pusat
-// navigasi kembali ke menu utama.
-// =====================================================
 
 async function kembaliKeMenu() {
-
-  console.log(
-    "KEMBALI KE MENU ditekan."
-  );
-
-
-  // Cegah proses ganda
 
   if (
     sedangRegistrasi
   ) {
-
-    console.log(
-      "Registrasi sedang berlangsung."
-    );
 
     return;
 
   }
 
 
-  // Matikan scanner terlebih dahulu
-
   await hentikanScanner();
 
 
-  // Bersihkan semua area
+  el("reader").innerHTML =
+    "";
 
-  el("reader").innerHTML = "";
+  el("hasil").innerHTML =
+    "";
 
-  el("hasil").innerHTML = "";
+  el("hasilPencarian").innerHTML =
+    "";
 
-  el("hasilPencarian").innerHTML = "";
-
-
-  // Sembunyikan semua halaman
 
   el("reader").style.display =
     "none";
@@ -1410,35 +1515,31 @@ async function kembaliKeMenu() {
     "none";
 
 
-  // Tampilkan menu utama
-
   el("menuUtama").style.display =
     "block";
 
 
-  // Reset state
+  sudahScan =
+    false;
 
-  sudahScan = false;
+  idPesertaAktif =
+    "";
 
-  nomorPesertaAktif = "";
+  nomorPesertaHasilRegistrasi =
+    "";
 
-  hasilPesertaManual = [];
+  hasilPesertaManual =
+    [];
 
-  sedangMencari = false;
+  sedangMencari =
+    false;
 
-
-  // Pastikan tombol menu aktif
 
   el("mulaiButton").disabled =
     false;
 
   el("cariManualButton").disabled =
     false;
-
-
-  console.log(
-    "Kembali ke menu berhasil."
-  );
 
 }
 
@@ -1449,58 +1550,52 @@ async function kembaliKeMenu() {
 
 async function bukaPencarian() {
 
-  console.log(
-    "Membuka pencarian manual."
-  );
-
-
   await hentikanScanner();
 
 
   el("menuUtama").style.display =
     "none";
 
-
   el("reader").style.display =
     "none";
-
 
   el("reader").innerHTML =
     "";
 
-
   el("hasil").style.display =
     "none";
-
 
   el("hasil").innerHTML =
     "";
 
-
   el("pencarian").style.display =
     "block";
 
-
   el("hasilPencarian").innerHTML =
     "";
-
 
   el("inputPencarian").value =
     "";
 
 
-  nomorPesertaAktif =
+  idPesertaAktif =
+    "";
+
+  nomorPesertaHasilRegistrasi =
     "";
 
   sudahScan =
     false;
 
 
-  setTimeout(function() {
+  setTimeout(
+    function() {
 
-    el("inputPencarian").focus();
+      el("inputPencarian").focus();
 
-  }, 100);
+    },
+    100
+  );
 
 }
 
@@ -1511,37 +1606,23 @@ async function bukaPencarian() {
 
 async function mulaiScanner() {
 
-  console.log(
-    "Memulai scanner."
-  );
-
-
-  // Pastikan scanner lama berhenti
-
   await hentikanScanner();
 
-
-  // Reset tampilan
 
   el("menuUtama").style.display =
     "none";
 
-
   el("pencarian").style.display =
     "none";
-
 
   el("hasil").style.display =
     "none";
 
-
   el("hasil").innerHTML =
     "";
 
-
   el("reader").innerHTML =
     "";
-
 
   el("reader").style.display =
     "block";
@@ -1550,12 +1631,12 @@ async function mulaiScanner() {
   sudahScan =
     false;
 
-
-  nomorPesertaAktif =
+  idPesertaAktif =
     "";
 
+  nomorPesertaHasilRegistrasi =
+    "";
 
-  // Buat scanner baru
 
   scanner =
     new Html5Qrcode(
@@ -1626,7 +1707,7 @@ async function mulaiScanner() {
 
         <br><br>
 
-        ${error}
+        ${escapeHTML(error)}
 
       </div>
 
@@ -1661,51 +1742,48 @@ async function onScanSuccess(
     true;
 
 
-  nomorPesertaAktif =
+  // ===================================================
+  // QR BERISI ID PESERTA
+  // ===================================================
+
+  idPesertaAktif =
     String(
       decodedText
     ).trim();
 
 
   console.log(
-    "QR terbaca:",
-    nomorPesertaAktif
+    "ID Peserta dari QR:",
+    idPesertaAktif
   );
 
-
-  // Hentikan scanner
 
   await hentikanScanner();
 
 
-  // Tampilkan loading
-
   tampilkanLoading();
 
 
-  // Cari peserta
-
   cekPeserta(
-    nomorPesertaAktif
+    idPesertaAktif
   );
 
 }
 
 
 // =====================================================
-// QR GAGAL DIBACA
+// QR GAGAL
 // =====================================================
 
 function onScanFailure(error) {
 
   // Tidak perlu menampilkan error.
-  // Scanner terus mencari QR.
 
 }
 
 
 // =====================================================
-// TAMPILKAN LOADING
+// LOADING
 // =====================================================
 
 function tampilkanLoading() {
@@ -1726,10 +1804,14 @@ function tampilkanLoading() {
 
       <br><br>
 
-      Nomor QR:
+      ID Peserta:
 
       <strong>
-        ${nomorPesertaAktif}
+
+        ${escapeHTML(
+          idPesertaAktif
+        )}
+
       </strong>
 
       <br><br>
@@ -1744,90 +1826,110 @@ function tampilkanLoading() {
 
 
 // =====================================================
-// CEK PESERTA DARI QR
+// CEK PESERTA
 // =====================================================
 
-function cekPeserta(nomor) {
+function cekPeserta(idPeserta) {
 
   fetch(
 
     API_URL +
     "?action=cek&nomor=" +
-    encodeURIComponent(nomor),
+    encodeURIComponent(
+      idPeserta
+    ),
 
     {
+
       method:
         "GET",
 
       cache:
         "no-store"
+
     }
 
   )
 
-  .then(function(response) {
+  .then(
+    function(response) {
 
-    if (!response.ok) {
+      if (!response.ok) {
 
-      throw new Error(
-        "HTTP Error " +
-        response.status
-      );
+        throw new Error(
+          "HTTP Error " +
+          response.status
+        );
+
+      }
+
+
+      return response.json();
 
     }
+  )
+
+  .then(
+    function(data) {
+
+      console.log(
+        "Respons API:",
+        data
+      );
 
 
-    return response.json();
+      if (
 
-  })
-
-
-  .then(function(data) {
-
-    console.log(
-      "Respons API QR:",
-      data
-    );
-
-
-    if (
-
-      data.success &&
-      data.ditemukan
-
-    ) {
-
-      tampilkanPeserta(
+        data.success &&
+        data.ditemukan &&
         data.peserta
-      );
+
+      ) {
+
+        // =============================================
+        // PASTIKAN ID PESERTA AKTIF
+        // =============================================
+
+        idPesertaAktif =
+          String(
+            data.peserta.idPeserta ||
+            idPesertaAktif
+          ).trim();
+
+
+        tampilkanPeserta(
+          data.peserta
+        );
+
+      }
+
+      else {
+
+        tampilkanPesertaTidakDitemukan(
+
+          data.message ||
+          "ID Peserta tidak ditemukan."
+
+        );
+
+      }
 
     }
+  )
 
-    else {
+  .catch(
+    function(error) {
 
-      tampilkanPesertaTidakDitemukan(
-
-        data.message ||
-        "Nomor peserta tidak ditemukan."
-
+      console.error(
+        "Error API:",
+        error
       );
 
+
+      tampilkanErrorAPI();
+
     }
-
-  })
-
-
-  .catch(function(error) {
-
-    console.error(
-      "Error API QR:",
-      error
-    );
-
-
-    tampilkanErrorAPI();
-
-  });
+  );
 
 }
 
@@ -1860,7 +1962,7 @@ async function cariManual() {
   if (!keyword) {
 
     alert(
-      "Masukkan nama atau nomor peserta."
+      "Masukkan ID Peserta, nomor peserta, atau nama peserta."
     );
 
 
@@ -1894,13 +1996,9 @@ async function cariManual() {
 
     API_URL +
     "?action=cari&q=" +
-    encodeURIComponent(keyword);
-
-
-  console.log(
-    "URL pencarian:",
-    url
-  );
+    encodeURIComponent(
+      keyword
+    );
 
 
   try {
@@ -1923,19 +2021,11 @@ async function cariManual() {
       );
 
 
-    console.log(
-      "HTTP Status:",
-      response.status
-    );
-
-
     if (!response.ok) {
 
       throw new Error(
-
         "HTTP Error " +
         response.status
-
       );
 
     }
@@ -1943,12 +2033,6 @@ async function cariManual() {
 
     const text =
       await response.text();
-
-
-    console.log(
-      "Response mentah:",
-      text
-    );
 
 
     let data;
@@ -1971,7 +2055,7 @@ async function cariManual() {
 
 
     console.log(
-      "Data JSON:",
+      "Data pencarian:",
       data
     );
 
@@ -2001,8 +2085,10 @@ async function cariManual() {
           <br><br>
 
           ${
-            data.message ||
-            "Tidak ada peserta yang cocok."
+            escapeHTML(
+              data.message ||
+              "Tidak ada peserta yang cocok."
+            )
           }
 
         </div>
@@ -2080,33 +2166,98 @@ function tampilkanHasilPencarian(
 
     function(peserta, index) {
 
+      // ===============================================
+      // TENTUKAN NOMOR YANG DITAMPILKAN
+      // ===============================================
+      //
+      // Jika sudah registrasi:
+      // tampilkan Nomor Peserta.
+      //
+      // Jika belum:
+      // tampilkan ID Peserta.
+      // ===============================================
+
+      const sudahRegistrasi =
+
+        String(
+          peserta.statusRegistrasi || ""
+        ).trim() ===
+        "Sudah Registrasi";
+
+
+      const nomorTampilan =
+
+        sudahRegistrasi
+
+          ? (
+              peserta.nomor ||
+              peserta.idPeserta ||
+              "-"
+            )
+
+          : (
+              peserta.idPeserta ||
+              peserta.nomor ||
+              "-"
+            );
+
+
       html += `
 
         <div class="result-card">
 
           <div class="result-number">
 
-            ${peserta.nomor || "-"}
+            ${escapeHTML(
+              nomorTampilan
+            )}
 
           </div>
 
 
           <div class="result-name">
 
-            ${peserta.nama || "-"}
+            ${escapeHTML(
+              peserta.nama || "-"
+            )}
 
           </div>
 
 
           <div class="result-detail">
 
+            ID Peserta:
+            ${escapeHTML(
+              peserta.idPeserta || "-"
+            )}
+
+            <br>
+
+            Nomor Peserta:
+            ${escapeHTML(
+              peserta.nomor || "Belum ditentukan"
+            )}
+
+            <br>
+
             Usia:
-            ${peserta.usia || "-"}
+            ${escapeHTML(
+              peserta.usia || "-"
+            )}
 
             <br>
 
             Kategori:
-            ${peserta.kategori || "-"}
+            ${escapeHTML(
+              peserta.kategori || "-"
+            )}
+
+            <br>
+
+            Status:
+            ${escapeHTML(
+              peserta.statusRegistrasi || "-"
+            )}
 
           </div>
 
@@ -2132,10 +2283,6 @@ function tampilkanHasilPencarian(
   hasil.innerHTML =
     html;
 
-
-  // ===================================================
-  // EVENT PILIH PESERTA
-  // ===================================================
 
   const tombolPilih =
     hasil.querySelectorAll(
@@ -2183,11 +2330,9 @@ function pilihPesertaDariIndex(
 ) {
 
   if (
-
     !Array.isArray(
       hasilPesertaManual
     )
-
   ) {
 
     return;
@@ -2196,9 +2341,7 @@ function pilihPesertaDariIndex(
 
 
   if (
-
     !hasilPesertaManual[index]
-
   ) {
 
     return;
@@ -2225,9 +2368,38 @@ function pilihPeserta(
   peserta
 ) {
 
-  nomorPesertaAktif =
+  // ===================================================
+  // SANGAT PENTING:
+  // Yang disimpan sebagai ID AKTIF adalah ID Peserta.
+  //
+  // Bukan nomor peserta A-001.
+  // ===================================================
+
+  idPesertaAktif =
     String(
-      peserta.nomor || ""
+      peserta.idPeserta ||
+      ""
+    ).trim();
+
+
+  // Jika API lama/hasil tertentu tidak memiliki
+  // idPeserta, gunakan nomor sebagai fallback.
+
+  if (!idPesertaAktif) {
+
+    idPesertaAktif =
+      String(
+        peserta.nomor ||
+        ""
+      ).trim();
+
+  }
+
+
+  nomorPesertaHasilRegistrasi =
+    String(
+      peserta.nomor ||
+      ""
     ).trim();
 
 
@@ -2263,6 +2435,67 @@ function tampilkanPeserta(
 
 
   // ===================================================
+  // DATA UTAMA
+  // ===================================================
+
+  const idPeserta =
+
+    String(
+      peserta.idPeserta ||
+      idPesertaAktif ||
+      ""
+    ).trim();
+
+
+  const nomorPeserta =
+
+    String(
+      peserta.nomor ||
+      ""
+    ).trim();
+
+
+  const statusPembayaran =
+
+    String(
+      peserta.statusPembayaran ||
+      ""
+    ).trim();
+
+
+  const statusRegistrasi =
+
+    String(
+      peserta.statusRegistrasi ||
+      ""
+    ).trim();
+
+
+  const sudahRegistrasi =
+
+    statusRegistrasi ===
+    "Sudah Registrasi";
+
+
+  const pembayaranLunas =
+
+    statusPembayaran ===
+    "Lunas";
+
+
+  // ===================================================
+  // PASTIKAN ID AKTIF
+  // ===================================================
+
+  if (idPeserta) {
+
+    idPesertaAktif =
+      idPeserta;
+
+  }
+
+
+  // ===================================================
   // STATUS PEMBAYARAN
   // ===================================================
 
@@ -2270,13 +2503,7 @@ function tampilkanPeserta(
     "status-belum";
 
 
-  if (
-
-    String(
-      peserta.statusPembayaran
-    ).trim() === "Lunas"
-
-  ) {
+  if (pembayaranLunas) {
 
     kelasPembayaran =
       "status-lunas";
@@ -2292,14 +2519,7 @@ function tampilkanPeserta(
     "status-belum";
 
 
-  if (
-
-    String(
-      peserta.statusRegistrasi
-    ).trim() ===
-    "Sudah Registrasi"
-
-  ) {
+  if (sudahRegistrasi) {
 
     kelasRegistrasi =
       "status-sudah";
@@ -2307,20 +2527,67 @@ function tampilkanPeserta(
   }
 
 
-  const sudahRegistrasi =
+  // ===================================================
+  // TAMPILAN NOMOR
+  // ===================================================
+  //
+  // BELUM REGISTRASI:
+  // tampilkan ID Peserta.
+  //
+  // SUDAH REGISTRASI:
+  // tampilkan Nomor Peserta.
+  // ===================================================
 
-    String(
-      peserta.statusRegistrasi
-    ).trim() ===
-    "Sudah Registrasi";
+  let nomorUtamaHTML = "";
 
 
-  const pembayaranLunas =
+  if (sudahRegistrasi && nomorPeserta) {
 
-    String(
-      peserta.statusPembayaran
-    ).trim() ===
-    "Lunas";
+    nomorUtamaHTML = `
+
+      <div class="nomor-registrasi">
+
+        <div class="nomor-registrasi-label">
+
+          Nomor Peserta
+
+        </div>
+
+        <div class="nomor-registrasi-value">
+
+          ${escapeHTML(
+            nomorPeserta
+          )}
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+  else {
+
+    nomorUtamaHTML = `
+
+      <div class="nomor-label">
+
+        ID Peserta
+
+      </div>
+
+      <div class="nomor">
+
+        ${escapeHTML(
+          idPeserta || "-"
+        )}
+
+      </div>
+
+    `;
+
+  }
 
 
   // ===================================================
@@ -2336,11 +2603,12 @@ function tampilkanPeserta(
     tombolRegistrasi = `
 
       <button
+        id="registrasiButton"
         class="registrasi-button"
         type="button"
         disabled>
 
-        ✅ SUDAH REGISTRASI
+        ✅ REGISTRASI BERHASIL
 
       </button>
 
@@ -2353,6 +2621,7 @@ function tampilkanPeserta(
     tombolRegistrasi = `
 
       <button
+        id="registrasiButton"
         class="registrasi-button"
         type="button"
         disabled>
@@ -2403,8 +2672,10 @@ function tampilkanPeserta(
 
         <strong>
 
-          ${formatWaktu(
-            peserta.waktuRegistrasi
+          ${escapeHTML(
+            formatWaktu(
+              peserta.waktuRegistrasi
+            )
           )}
 
         </strong>
@@ -2417,7 +2688,7 @@ function tampilkanPeserta(
 
 
   // ===================================================
-  // TAMPILKAN
+  // DATA LENGKAP
   // ===================================================
 
   hasil.innerHTML = `
@@ -2429,14 +2700,35 @@ function tampilkanPeserta(
     </div>
 
 
-    <div class="nomor">
-
-      ${peserta.nomor || "-"}
-
-    </div>
+    ${nomorUtamaHTML}
 
 
     <div class="data">
+
+
+      ${
+        !sudahRegistrasi && idPeserta
+          ? `
+            <div class="row">
+
+              <div class="label">
+
+                ID Peserta
+
+              </div>
+
+              <div class="value">
+
+                ${escapeHTML(
+                  idPeserta
+                )}
+
+              </div>
+
+            </div>
+          `
+          : ""
+      }
 
 
       <div class="row">
@@ -2449,7 +2741,9 @@ function tampilkanPeserta(
 
         <div class="value">
 
-          ${peserta.nama || "-"}
+          ${escapeHTML(
+            peserta.nama || "-"
+          )}
 
         </div>
 
@@ -2466,7 +2760,9 @@ function tampilkanPeserta(
 
         <div class="value">
 
-          ${peserta.usia || "-"}
+          ${escapeHTML(
+            peserta.usia || "-"
+          )}
 
         </div>
 
@@ -2483,7 +2779,9 @@ function tampilkanPeserta(
 
         <div class="value">
 
-          ${peserta.orangtua || "-"}
+          ${escapeHTML(
+            peserta.orangtua || "-"
+          )}
 
         </div>
 
@@ -2500,7 +2798,9 @@ function tampilkanPeserta(
 
         <div class="value">
 
-          ${peserta.kategori || "-"}
+          ${escapeHTML(
+            peserta.kategori || "-"
+          )}
 
         </div>
 
@@ -2518,7 +2818,9 @@ function tampilkanPeserta(
         <div
           class="status ${kelasPembayaran}">
 
-          ${peserta.statusPembayaran || "-"}
+          ${escapeHTML(
+            peserta.statusPembayaran || "-"
+          )}
 
         </div>
 
@@ -2537,7 +2839,9 @@ function tampilkanPeserta(
           id="statusRegistrasi"
           class="status ${kelasRegistrasi}">
 
-          ${peserta.statusRegistrasi || "-"}
+          ${escapeHTML(
+            peserta.statusRegistrasi || "-"
+          )}
 
         </div>
 
@@ -2566,7 +2870,7 @@ function tampilkanPeserta(
 
 
   // ===================================================
-  // EVENT BUTTON REGISTRASI
+  // EVENT REGISTRASI
   // ===================================================
 
   const tombolRegistrasiElement =
@@ -2574,7 +2878,9 @@ function tampilkanPeserta(
 
 
   if (
-    tombolRegistrasiElement
+    tombolRegistrasiElement &&
+    !sudahRegistrasi &&
+    pembayaranLunas
   ) {
 
     tombolRegistrasiElement
@@ -2587,7 +2893,7 @@ function tampilkanPeserta(
 
 
   // ===================================================
-  // EVENT BUTTON KEMBALI
+  // EVENT KEMBALI
   // ===================================================
 
   const tombolKembali =
@@ -2636,7 +2942,9 @@ function tampilkanPesertaTidakDitemukan(
 
     <div class="nomor">
 
-      ${nomorPesertaAktif}
+      ${escapeHTML(
+        idPesertaAktif
+      )}
 
     </div>
 
@@ -2648,7 +2956,9 @@ function tampilkanPesertaTidakDitemukan(
         color:#777;
       ">
 
-      ${message}
+      ${escapeHTML(
+        message
+      )}
 
     </div>
 
@@ -2712,11 +3022,13 @@ function tampilkanErrorAPI() {
         margin-top:15px;
       ">
 
-      Nomor QR:
+      ID Peserta:
 
       <strong>
 
-        ${nomorPesertaAktif}
+        ${escapeHTML(
+          idPesertaAktif
+        )}
 
       </strong>
 
@@ -2760,13 +3072,28 @@ function tampilkanErrorAPI() {
 // =====================================================
 // REGISTRASI PESERTA
 // =====================================================
+//
+// PENTING:
+//
+// API menerima ID PESERTA.
+//
+// Contoh:
+//
+// MW46-001
+//
+// API kemudian membuat nomor:
+//
+// A-001
+//
+// Jadi kita TIDAK mengirim A-001 ke API.
+// =====================================================
 
 async function registrasiPeserta() {
 
-  if (!nomorPesertaAktif) {
+  if (!idPesertaAktif) {
 
     alert(
-      "Nomor peserta tidak ditemukan."
+      "ID Peserta tidak ditemukan."
     );
 
     return;
@@ -2805,8 +3132,8 @@ async function registrasiPeserta() {
 
 
   console.log(
-    "Registrasi peserta:",
-    nomorPesertaAktif
+    "Registrasi menggunakan ID Peserta:",
+    idPesertaAktif
   );
 
 
@@ -2818,15 +3145,17 @@ async function registrasiPeserta() {
         API_URL +
         "?action=registrasi&nomor=" +
         encodeURIComponent(
-          nomorPesertaAktif
+          idPesertaAktif
         ),
 
         {
+
           method:
             "GET",
 
           cache:
             "no-store"
+
         }
 
       );
@@ -2835,10 +3164,8 @@ async function registrasiPeserta() {
     if (!response.ok) {
 
       throw new Error(
-
         "HTTP Error " +
         response.status
-
       );
 
     }
@@ -2854,7 +3181,22 @@ async function registrasiPeserta() {
     );
 
 
+    // =================================================
+    // REGISTRASI BERHASIL
+    // =================================================
+
     if (data.success) {
+
+
+      // ===============================================
+      // SIMPAN NOMOR BARU
+      // ===============================================
+
+      nomorPesertaHasilRegistrasi =
+        String(
+          data.nomor ||
+          ""
+        ).trim();
 
 
       // ===============================================
@@ -2878,15 +3220,109 @@ async function registrasiPeserta() {
 
 
       // ===============================================
-      // UPDATE BUTTON
+      // UPDATE NOMOR UTAMA
+      // ===============================================
+      //
+      // ID Peserta:
+      // MW46-001
+      //
+      // berubah menjadi:
+      // A-001
       // ===============================================
 
-      button.textContent =
-        "✅ REGISTRASI BERHASIL";
+      const nomorLabel =
+        document.querySelector(
+          ".nomor-label"
+        );
 
 
-      button.disabled =
-        true;
+      const nomorElement =
+        document.querySelector(
+          ".nomor"
+        );
+
+
+      if (
+        nomorLabel &&
+        nomorElement
+      ) {
+
+        nomorLabel.outerHTML = `
+
+          <div class="nomor-registrasi">
+
+            <div class="nomor-registrasi-label">
+
+              Nomor Peserta
+
+            </div>
+
+            <div class="nomor-registrasi-value">
+
+              ${escapeHTML(
+                nomorPesertaHasilRegistrasi
+              )}
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        nomorElement.remove();
+
+      }
+
+      else {
+
+        // Jika struktur tampilan sudah berubah,
+        // cari container data dan tambahkan nomor.
+
+        const dataContainer =
+          document.querySelector(
+            ".data"
+          );
+
+
+        if (dataContainer) {
+
+          const nomorBaruElement =
+            document.createElement(
+              "div"
+            );
+
+
+          nomorBaruElement.className =
+            "nomor-registrasi";
+
+
+          nomorBaruElement.innerHTML = `
+
+            <div class="nomor-registrasi-label">
+
+              Nomor Peserta
+
+            </div>
+
+            <div class="nomor-registrasi-value">
+
+              ${escapeHTML(
+                nomorPesertaHasilRegistrasi
+              )}
+
+            </div>
+
+          `;
+
+
+          dataContainer.prepend(
+            nomorBaruElement
+          );
+
+        }
+
+      }
 
 
       // ===============================================
@@ -2913,7 +3349,9 @@ async function registrasiPeserta() {
 
           <strong>
 
-            ${waktuBaru}
+            ${escapeHTML(
+              waktuBaru
+            )}
 
           </strong>
 
@@ -2947,7 +3385,9 @@ async function registrasiPeserta() {
 
             <strong>
 
-              ${waktuBaru}
+              ${escapeHTML(
+                waktuBaru
+              )}
 
             </strong>
 
@@ -2965,7 +3405,19 @@ async function registrasiPeserta() {
 
 
       // ===============================================
-      // NOTIFIKASI
+      // UPDATE BUTTON
+      // ===============================================
+
+      button.textContent =
+        "✅ REGISTRASI BERHASIL";
+
+
+      button.disabled =
+        true;
+
+
+      // ===============================================
+      // ALERT
       // ===============================================
 
       alert(
@@ -2973,19 +3425,102 @@ async function registrasiPeserta() {
         "✅ REGISTRASI BERHASIL!\n\n" +
 
         "Nomor Peserta: " +
-        data.nomor +
+        (
+          data.nomor ||
+          "-"
+        ) +
 
         "\nNama: " +
-        data.nama +
+        (
+          data.nama ||
+          "-"
+        ) +
 
         "\nWaktu: " +
-        waktuBaru
+        (
+          waktuBaru ||
+          "-"
+        )
 
       );
 
+
+      // ===============================================
+      // PENTING:
+      // idPesertaAktif TETAP ID PESERTA
+      // ===============================================
+      //
+      // Kita sengaja TIDAK mengubah:
+      //
+      // idPesertaAktif = data.nomor
+      //
+      // karena jika panitia melakukan proses lain
+      // atau API dipanggil kembali, identitas peserta
+      // tetap harus menggunakan ID Peserta.
+      // ===============================================
+
     }
 
+
+    // =================================================
+    // REGISTRASI GAGAL
+    // =================================================
+
     else {
+
+      // -----------------------------------------------
+      // Jika sebenarnya sudah terdaftar
+      // -----------------------------------------------
+
+      if (
+        data.sudahRegistrasi &&
+        data.nomor
+      ) {
+
+        nomorPesertaHasilRegistrasi =
+          String(
+            data.nomor
+          ).trim();
+
+
+        button.textContent =
+          "✅ REGISTRASI BERHASIL";
+
+
+        button.disabled =
+          true;
+
+
+        const status =
+          el("statusRegistrasi");
+
+
+        if (status) {
+
+          status.textContent =
+            "Sudah Registrasi";
+
+
+          status.className =
+            "status status-sudah";
+
+        }
+
+
+        alert(
+
+          "Peserta ini sudah melakukan registrasi.\n\n" +
+
+          "Nomor Peserta: " +
+          data.nomor
+
+        );
+
+
+        return;
+
+      }
+
 
       button.disabled =
         false;
@@ -3047,16 +3582,13 @@ async function registrasiPeserta() {
 
 
 // =====================================================
-// EVENT LISTENER MENU
-// =====================================================
-//
-// Semua tombol navigasi utama sekarang menggunakan
-// addEventListener. Tidak lagi menggunakan inline
-// onclick untuk tombol-tombol navigasi.
+// EVENT LISTENER
 // =====================================================
 
 document.addEventListener(
+
   "DOMContentLoaded",
+
   function() {
 
 
@@ -3107,12 +3639,14 @@ document.addEventListener(
 
 
     // ===============================================
-    // ENTER PADA INPUT PENCARIAN
+    // ENTER PADA PENCARIAN
     // ===============================================
 
     el("inputPencarian")
       .addEventListener(
+
         "keydown",
+
         function(event) {
 
           if (
@@ -3127,6 +3661,7 @@ document.addEventListener(
           }
 
         }
+
       );
 
 
