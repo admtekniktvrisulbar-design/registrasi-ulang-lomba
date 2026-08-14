@@ -23,7 +23,6 @@
       box-sizing: border-box;
     }
 
-
     body {
 
       font-family:
@@ -47,7 +46,6 @@
 
     }
 
-
     .container {
 
       width:
@@ -61,7 +59,6 @@
 
     }
 
-
     h1 {
 
       color:
@@ -74,7 +71,6 @@
         32px;
 
     }
-
 
     .subtitle {
 
@@ -91,7 +87,6 @@
         1.4;
 
     }
-
 
     button {
 
@@ -131,14 +126,12 @@
 
     }
 
-
     button:active {
 
       transform:
         scale(0.99);
 
     }
-
 
     button:disabled {
 
@@ -153,14 +146,12 @@
 
     }
 
-
     #menuUtama {
 
       display:
         block;
 
     }
-
 
     #reader {
 
@@ -181,14 +172,12 @@
 
     }
 
-
     #reader:empty {
 
       display:
         none;
 
     }
-
 
     #hasil {
 
@@ -216,7 +205,6 @@
 
     }
 
-
     #pencarian {
 
       display:
@@ -239,7 +227,6 @@
         rgba(0,0,0,0.12);
 
     }
-
 
     .search-input {
 
@@ -266,7 +253,6 @@
 
     }
 
-
     .search-input:focus {
 
       border-color:
@@ -274,14 +260,12 @@
 
     }
 
-
     .search-button {
 
       background:
         #0b3d91;
 
     }
-
 
     .result-count {
 
@@ -298,7 +282,6 @@
         left;
 
     }
-
 
     .result-card {
 
@@ -322,7 +305,6 @@
 
     }
 
-
     .result-number {
 
       color:
@@ -336,7 +318,6 @@
 
     }
 
-
     .result-name {
 
       font-size:
@@ -349,7 +330,6 @@
         5px;
 
     }
-
 
     .result-detail {
 
@@ -367,7 +347,6 @@
 
     }
 
-
     .choose-button {
 
       background:
@@ -377,7 +356,6 @@
         12px;
 
     }
-
 
     .success {
 
@@ -406,7 +384,6 @@
         18px;
 
     }
-
 
     .error {
 
@@ -439,7 +416,6 @@
 
     }
 
-
     .nomor {
 
       font-size:
@@ -461,7 +437,6 @@
         break-word;
 
     }
-
 
     .nomor-label {
 
@@ -485,14 +460,12 @@
 
     }
 
-
     .data {
 
       margin-top:
         15px;
 
     }
-
 
     .row {
 
@@ -503,7 +476,6 @@
         1px solid #eee;
 
     }
-
 
     .label {
 
@@ -517,7 +489,6 @@
         4px;
 
     }
-
 
     .value {
 
@@ -537,7 +508,6 @@
         break-word;
 
     }
-
 
     .status {
 
@@ -561,7 +531,6 @@
 
     }
 
-
     .status-lunas {
 
       background:
@@ -571,7 +540,6 @@
         #176b2b;
 
     }
-
 
     .status-belum {
 
@@ -583,7 +551,6 @@
 
     }
 
-
     .status-sudah {
 
       background:
@@ -593,7 +560,6 @@
         #176b2b;
 
     }
-
 
     .loading {
 
@@ -614,14 +580,12 @@
 
     }
 
-
     .secondary-button {
 
       background:
         #555;
 
     }
-
 
     .registrasi-button {
 
@@ -632,7 +596,6 @@
         20px;
 
     }
-
 
     .waktu {
 
@@ -652,7 +615,6 @@
         1.5;
 
     }
-
 
     .nomor-registrasi {
 
@@ -676,7 +638,6 @@
 
     }
 
-
     .nomor-registrasi-label {
 
       color:
@@ -689,7 +650,6 @@
         5px;
 
     }
-
 
     .nomor-registrasi-value {
 
@@ -707,7 +667,6 @@
 
     }
 
-
     @media (max-width: 600px) {
 
       body {
@@ -717,35 +676,31 @@
 
       }
 
-
       h1 {
 
         font-size:
-          28px;
+        28px;
 
       }
-
 
       .subtitle {
 
         font-size:
-          17px;
+        17px;
 
       }
-
 
       .nomor {
 
         font-size:
-          26px;
+        26px;
 
       }
-
 
       .nomor-registrasi-value {
 
         font-size:
-          27px;
+        27px;
 
       }
 
@@ -778,7 +733,6 @@
 
   <div id="menuUtama">
 
-
     <button
       id="mulaiButton"
       type="button">
@@ -797,7 +751,6 @@
 
     </button>
 
-
   </div>
 
 
@@ -805,7 +758,6 @@
 
 
   <div id="pencarian">
-
 
     <h2
       style="
@@ -860,7 +812,6 @@
 
     </button>
 
-
   </div>
 
 
@@ -875,7 +826,7 @@
 
 
 // =====================================================
-// API
+// KONFIGURASI API
 // =====================================================
 
 const API_URL =
@@ -883,7 +834,7 @@ const API_URL =
 
 
 // =====================================================
-// VARIABEL
+// VARIABEL GLOBAL
 // =====================================================
 
 let scanner = null;
@@ -902,7 +853,7 @@ let sedangRegistrasi = false;
 
 
 // =====================================================
-// ELEMENT
+// HELPER ELEMENT
 // =====================================================
 
 function el(id) {
@@ -927,7 +878,6 @@ function escapeHTML(value) {
 
   }
 
-
   return String(value)
 
     .replace(/&/g, "&amp;")
@@ -944,356 +894,27 @@ function escapeHTML(value) {
 
 
 // =====================================================
-// NORMALISASI ID PESERTA
+// NORMALISASI ID
 // =====================================================
 //
-// Ini bagian penting untuk mengatasi response API
-// yang saat ini terlihat bergeser.
-//
-// ID peserta kita mempunyai pola:
+// Digunakan supaya:
 //
 // MW46-001
-// MG12-002
 //
-// Sedangkan:
+// dan:
 //
-// CellImage
-// bukan ID peserta.
+// mw46-001
 //
-// Jika field idPeserta berisi CellImage tetapi
-// statusPembayaran berisi MW46-001,
-// maka MW46-001 akan digunakan sebagai ID.
+// tetap dianggap ID yang sama.
 // =====================================================
 
-function adalahIDPeserta(value) {
+function normalisasiID(value) {
 
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return false;
-
-  }
-
-
-  return /^[A-Z]{2}\d{2,}-\d{3,}$/i.test(
-    String(value).trim()
-  );
-
-}
-
-
-// =====================================================
-// CEK NOMOR PESERTA
-// =====================================================
-//
-// Nomor setelah registrasi:
-//
-// A-001
-// B-001
-//
-// =====================================================
-
-function adalahNomorPeserta(value) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return false;
-
-  }
-
-
-  return /^[A-Z]-\d{3,}$/i.test(
-    String(value).trim()
-  );
-
-}
-
-
-// =====================================================
-// CEK STATUS PEMBAYARAN
-// =====================================================
-
-function adalahStatusPembayaran(value) {
-
-  const text =
-    String(
-      value || ""
-    )
+  return String(
+    value || ""
+  )
     .trim()
-    .toLowerCase();
-
-
-  return (
-
-    text === "lunas" ||
-
-    text === "belum lunas" ||
-
-    text === "belum_lunas" ||
-
-    text === "belum bayar" ||
-
-    text === "sudah bayar"
-
-  );
-
-}
-
-
-// =====================================================
-// NORMALISASI DATA PESERTA
-// =====================================================
-//
-// Fungsi ini menjaga agar frontend tidak salah
-// membaca CellImage sebagai ID Peserta.
-//
-// Kita tidak mengubah data spreadsheet.
-// Kita hanya memperbaiki pembacaan response API.
-// =====================================================
-
-function normalisasiPeserta(data) {
-
-  if (
-    !data ||
-    typeof data !== "object"
-  ) {
-
-    return data;
-
-  }
-
-
-  const peserta = {
-    ...data
-  };
-
-
-  // ===================================================
-  // CARI ID PESERTA YANG BENAR
-  // ===================================================
-
-  let id =
-    String(
-      peserta.idPeserta ||
-      ""
-    ).trim();
-
-
-  // Jika idPeserta valid, gunakan langsung.
-
-  if (
-    !adalahIDPeserta(id)
-  ) {
-
-    const kandidat = [
-
-      peserta.id,
-
-      peserta.ID,
-
-      peserta["ID Peserta"],
-
-      peserta.nomor,
-
-      peserta.statusPembayaran,
-
-      peserta.kode
-
-    ];
-
-
-    for (
-      const item of kandidat
-    ) {
-
-      if (
-        adalahIDPeserta(item)
-      ) {
-
-        id =
-          String(
-            item
-          ).trim();
-
-        break;
-
-      }
-
-    }
-
-  }
-
-
-  // ===================================================
-  // SIMPAN ID YANG SUDAH DINORMALISASI
-  // ===================================================
-
-  if (id) {
-
-    peserta.idPeserta =
-      id;
-
-  }
-
-
-  // ===================================================
-  // NORMALISASI NOMOR PESERTA
-  // ===================================================
-
-  let nomor =
-    String(
-      peserta.nomor ||
-      ""
-    ).trim();
-
-
-  if (
-    !adalahNomorPeserta(nomor)
-  ) {
-
-    const kandidatNomor = [
-
-      peserta.nomorPeserta,
-
-      peserta["Nomor Peserta"],
-
-      peserta.nomorRegistrasi
-
-    ];
-
-
-    for (
-      const item of kandidatNomor
-    ) {
-
-      if (
-        adalahNomorPeserta(item)
-      ) {
-
-        nomor =
-          String(
-            item
-          ).trim();
-
-        break;
-
-      }
-
-    }
-
-  }
-
-
-  if (nomor) {
-
-    peserta.nomor =
-      nomor;
-
-  }
-
-
-  // ===================================================
-  // NORMALISASI STATUS PEMBAYARAN
-  // ===================================================
-  //
-  // Dari screenshot:
-  //
-  // statusPembayaran = MW46-001
-  // statusRegistrasi = Lunas
-  //
-  // Artinya field sedang bergeser.
-  //
-  // Kita pindahkan "Lunas" menjadi status pembayaran.
-  // ===================================================
-
-  let pembayaran =
-    String(
-      peserta.statusPembayaran ||
-      ""
-    ).trim();
-
-
-  let registrasi =
-    String(
-      peserta.statusRegistrasi ||
-      ""
-    ).trim();
-
-
-  if (
-    !adalahStatusPembayaran(
-      pembayaran
-    ) &&
-    adalahStatusPembayaran(
-      registrasi
-    )
-  ) {
-
-    pembayaran =
-      registrasi;
-
-  }
-
-
-  // ===================================================
-  // STATUS REGISTRASI
-  // ===================================================
-
-  // Jika sudah mempunyai nomor peserta A-001,
-  // berarti sudah registrasi.
-
-  if (
-    adalahNomorPeserta(
-      peserta.nomor
-    )
-  ) {
-
-    registrasi =
-      "Sudah Registrasi";
-
-  }
-
-
-  // Jika field statusRegistrasi ternyata berisi
-  // status pembayaran, jangan tampilkan "Lunas"
-  // sebagai status registrasi.
-
-  else if (
-    adalahStatusPembayaran(
-      registrasi
-    )
-  ) {
-
-    registrasi =
-      "Belum Registrasi";
-
-  }
-
-
-  // Jika kosong.
-
-  if (!registrasi) {
-
-    registrasi =
-      "Belum Registrasi";
-
-  }
-
-
-  peserta.statusPembayaran =
-    pembayaran;
-
-
-  peserta.statusRegistrasi =
-    registrasi;
-
-
-  return peserta;
+    .toUpperCase();
 
 }
 
@@ -1313,7 +934,6 @@ function formatWaktu(waktu) {
     return "";
 
   }
-
 
   try {
 
@@ -1446,7 +1066,6 @@ function formatWaktu(waktu) {
             " "
           );
 
-
         const bagian =
           bersih.split(/\s+/);
 
@@ -1556,7 +1175,6 @@ function formatWaktu(waktu) {
       error
     );
 
-
     return String(waktu);
 
   }
@@ -1594,8 +1212,7 @@ async function hentikanScanner() {
   catch (error) {
 
     console.log(
-      "Scanner sudah berhenti:",
-      error
+      "Scanner sudah berhenti."
     );
 
   }
@@ -1610,8 +1227,7 @@ async function hentikanScanner() {
   catch (error) {
 
     console.log(
-      "Reader sudah dibersihkan:",
-      error
+      "Reader sudah dibersihkan."
     );
 
   }
@@ -1620,14 +1236,63 @@ async function hentikanScanner() {
 
 
 // =====================================================
-// KEMBALI MENU
+// RESET TAMPILAN
+// =====================================================
+
+function resetTampilan() {
+
+  el("reader").innerHTML =
+    "";
+
+  el("hasil").innerHTML =
+    "";
+
+  el("hasilPencarian").innerHTML =
+    "";
+
+  el("reader").style.display =
+    "none";
+
+  el("hasil").style.display =
+    "none";
+
+  el("pencarian").style.display =
+    "none";
+
+  el("menuUtama").style.display =
+    "block";
+
+  el("inputPencarian").value =
+    "";
+
+  hasilPesertaManual =
+    [];
+
+  idPesertaAktif =
+    "";
+
+  nomorPesertaHasilRegistrasi =
+    "";
+
+  sudahScan =
+    false;
+
+  sedangMencari =
+    false;
+
+  sedangRegistrasi =
+    false;
+
+}
+
+
+// =====================================================
+// KEMBALI KE MENU
 // =====================================================
 
 async function kembaliKeMenu() {
 
-  if (
-    sedangRegistrasi
-  ) {
+  if (sedangRegistrasi) {
 
     return;
 
@@ -1646,7 +1311,6 @@ async function kembaliKeMenu() {
   el("hasilPencarian").innerHTML =
     "";
 
-
   el("reader").style.display =
     "none";
 
@@ -1658,7 +1322,6 @@ async function kembaliKeMenu() {
 
   el("menuUtama").style.display =
     "block";
-
 
   sudahScan =
     false;
@@ -1675,7 +1338,6 @@ async function kembaliKeMenu() {
   sedangMencari =
     false;
 
-
   el("mulaiButton").disabled =
     false;
 
@@ -1686,7 +1348,7 @@ async function kembaliKeMenu() {
 
 
 // =====================================================
-// BUKA PENCARIAN
+// BUKA PENCARIAN MANUAL
 // =====================================================
 
 async function bukaPencarian() {
@@ -1718,7 +1380,6 @@ async function bukaPencarian() {
   el("inputPencarian").value =
     "";
 
-
   idPesertaAktif =
     "";
 
@@ -1742,7 +1403,7 @@ async function bukaPencarian() {
 
 
 // =====================================================
-// SCANNER
+// MULAI SCANNER
 // =====================================================
 
 async function mulaiScanner() {
@@ -1820,6 +1481,11 @@ async function mulaiScanner() {
 
     );
 
+
+    console.log(
+      "Kamera berhasil dimulai."
+    );
+
   }
 
   catch (error) {
@@ -1859,7 +1525,18 @@ async function mulaiScanner() {
 
 
 // =====================================================
-// QR BERHASIL
+// QR BERHASIL DIBACA
+// =====================================================
+//
+// PERUBAHAN UTAMA:
+//
+// QR -> ID Peserta
+//
+// kemudian ID Peserta dicari melalui:
+//
+// action=cari&q=ID
+//
+// sehingga hasilnya sama seperti pencarian manual.
 // =====================================================
 
 async function onScanSuccess(
@@ -1884,15 +1561,256 @@ async function onScanSuccess(
     ).trim();
 
 
+  console.log(
+    "QR dibaca. ID Peserta:",
+    idPesertaAktif
+  );
+
+
   await hentikanScanner();
+
+
+  if (!idPesertaAktif) {
+
+    tampilkanPesertaTidakDitemukan(
+      "QR Code tidak berisi ID Peserta."
+    );
+
+    return;
+
+  }
 
 
   tampilkanLoading();
 
 
-  cekPeserta(
+  await cariPesertaDariQR(
     idPesertaAktif
   );
+
+}
+
+
+// =====================================================
+// PENCARIAN PESERTA DARI QR
+// =====================================================
+//
+// Menggunakan endpoint "cari" yang sama dengan
+// pencarian manual.
+// =====================================================
+
+async function cariPesertaDariQR(
+  idQR
+) {
+
+  const idYangDicari =
+    String(
+      idQR || ""
+    ).trim();
+
+
+  if (!idYangDicari) {
+
+    tampilkanPesertaTidakDitemukan(
+      "ID Peserta kosong."
+    );
+
+    return;
+
+  }
+
+
+  const url =
+
+    API_URL +
+    "?action=cari&q=" +
+    encodeURIComponent(
+      idYangDicari
+    );
+
+
+  try {
+
+    console.log(
+      "Mencari ID dari QR:",
+      idYangDicari
+    );
+
+
+    const response =
+      await fetch(
+
+        url,
+
+        {
+
+          method:
+            "GET",
+
+          cache:
+            "no-store"
+
+        }
+
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "HTTP Error " +
+        response.status
+      );
+
+    }
+
+
+    const text =
+      await response.text();
+
+
+    let data;
+
+
+    try {
+
+      data =
+        JSON.parse(text);
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Respons server bukan JSON:",
+        text
+      );
+
+      throw new Error(
+        "Server tidak mengirim JSON yang valid."
+      );
+
+    }
+
+
+    console.log(
+      "Respons pencarian QR:",
+      data
+    );
+
+
+    if (
+
+      data.success === true &&
+
+      Array.isArray(
+        data.peserta
+      ) &&
+
+      data.peserta.length > 0
+
+    ) {
+
+      // =================================================
+      // CARI HASIL YANG ID-NYA PERSIS SAMA
+      // DENGAN ISI QR
+      // =================================================
+
+      const idNormal =
+        normalisasiID(
+          idYangDicari
+        );
+
+
+      let peserta =
+        data.peserta.find(
+
+          function(item) {
+
+            return (
+
+              normalisasiID(
+                item.idPeserta
+              ) ===
+              idNormal
+
+            );
+
+          }
+
+        );
+
+
+      // =================================================
+      // Jika tidak ada kecocokan persis tetapi API
+      // hanya mengembalikan satu peserta, gunakan
+      // peserta tersebut.
+      // =================================================
+
+      if (
+        !peserta &&
+        data.peserta.length === 1
+      ) {
+
+        peserta =
+          data.peserta[0];
+
+      }
+
+
+      if (peserta) {
+
+        // ===============================================
+        // PENTING:
+        // ID AKTIF TETAP ID PESERTA
+        // ===============================================
+
+        idPesertaAktif =
+          String(
+            peserta.idPeserta ||
+            idYangDicari
+          ).trim();
+
+
+        nomorPesertaHasilRegistrasi =
+          String(
+            peserta.nomor ||
+            ""
+          ).trim();
+
+
+        tampilkanPeserta(
+          peserta
+        );
+
+
+        return;
+
+      }
+
+    }
+
+
+    tampilkanPesertaTidakDitemukan(
+
+      data.message ||
+      "ID Peserta tidak ditemukan."
+
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Error pencarian QR:",
+      error
+    );
+
+
+    tampilkanErrorAPI();
+
+  }
 
 }
 
@@ -1903,7 +1821,9 @@ async function onScanSuccess(
 
 function onScanFailure(error) {
 
-  // Sengaja kosong.
+  // Tidak menampilkan error
+  // karena callback ini dipanggil terus
+  // selama kamera aktif.
 
 }
 
@@ -1952,121 +1872,7 @@ function tampilkanLoading() {
 
 
 // =====================================================
-// CEK PESERTA
-// =====================================================
-
-function cekPeserta(idPeserta) {
-
-  fetch(
-
-    API_URL +
-    "?action=cek&nomor=" +
-    encodeURIComponent(
-      idPeserta
-    ),
-
-    {
-
-      method:
-        "GET",
-
-      cache:
-        "no-store"
-
-    }
-
-  )
-
-  .then(
-    function(response) {
-
-      if (!response.ok) {
-
-        throw new Error(
-          "HTTP Error " +
-          response.status
-        );
-
-      }
-
-
-      return response.json();
-
-    }
-  )
-
-  .then(
-    function(data) {
-
-      console.log(
-        "Respons API:",
-        data
-      );
-
-
-      if (
-
-        data.success &&
-        data.ditemukan &&
-        data.peserta
-
-      ) {
-
-        const peserta =
-          normalisasiPeserta(
-            data.peserta
-          );
-
-
-        if (
-          peserta.idPeserta
-        ) {
-
-          idPesertaAktif =
-            peserta.idPeserta;
-
-        }
-
-
-        tampilkanPeserta(
-          peserta
-        );
-
-      }
-
-      else {
-
-        tampilkanPesertaTidakDitemukan(
-
-          data.message ||
-          "ID Peserta tidak ditemukan."
-
-        );
-
-      }
-
-    }
-  )
-
-  .catch(
-    function(error) {
-
-      console.error(
-        "Error API:",
-        error
-      );
-
-
-      tampilkanErrorAPI();
-
-    }
-  );
-
-}
-
-
-// =====================================================
-// CARI MANUAL
+// PENCARIAN MANUAL
 // =====================================================
 
 async function cariManual() {
@@ -2194,29 +2000,17 @@ async function cariManual() {
     if (
 
       data.success === true &&
+
       data.jumlah > 0 &&
-      Array.isArray(data.peserta)
+
+      Array.isArray(
+        data.peserta
+      )
 
     ) {
 
-      // ===============================================
-      // NORMALISASI SEMUA HASIL
-      // ===============================================
-
-      const pesertaNormal =
-        data.peserta.map(
-          function(peserta) {
-
-            return normalisasiPeserta(
-              peserta
-            );
-
-          }
-        );
-
-
       tampilkanHasilPencarian(
-        pesertaNormal
+        data.peserta
       );
 
     }
@@ -2231,12 +2025,10 @@ async function cariManual() {
 
           <br><br>
 
-          ${
-            escapeHTML(
-              data.message ||
-              "Tidak ada peserta yang cocok."
-            )
-          }
+          ${escapeHTML(
+            data.message ||
+            "Tidak ada peserta yang cocok."
+          )}
 
         </div>
 
@@ -2281,7 +2073,7 @@ async function cariManual() {
 
 
 // =====================================================
-// HASIL PENCARIAN
+// TAMPILKAN HASIL PENCARIAN
 // =====================================================
 
 function tampilkanHasilPencarian(
@@ -2316,8 +2108,7 @@ function tampilkanHasilPencarian(
       const sudahRegistrasi =
 
         String(
-          peserta.statusRegistrasi ||
-          ""
+          peserta.statusRegistrasi || ""
         ).trim() ===
         "Sudah Registrasi";
 
@@ -2392,14 +2183,7 @@ function tampilkanHasilPencarian(
 
             <br>
 
-            Status Pembayaran:
-            ${escapeHTML(
-              peserta.statusPembayaran || "-"
-            )}
-
-            <br>
-
-            Status Registrasi:
+            Status:
             ${escapeHTML(
               peserta.statusRegistrasi || "-"
             )}
@@ -2467,7 +2251,7 @@ function tampilkanHasilPencarian(
 
 
 // =====================================================
-// PILIH PESERTA INDEX
+// PILIH PESERTA DARI HASIL PENCARIAN
 // =====================================================
 
 function pilihPesertaDariIndex(
@@ -2509,12 +2293,6 @@ function pilihPeserta(
   peserta
 ) {
 
-  peserta =
-    normalisasiPeserta(
-      peserta
-    );
-
-
   idPesertaAktif =
     String(
       peserta.idPeserta ||
@@ -2522,22 +2300,22 @@ function pilihPeserta(
     ).trim();
 
 
+  if (!idPesertaAktif) {
+
+    idPesertaAktif =
+      String(
+        peserta.nomor ||
+        ""
+      ).trim();
+
+  }
+
+
   nomorPesertaHasilRegistrasi =
     String(
       peserta.nomor ||
       ""
     ).trim();
-
-
-  if (!idPesertaAktif) {
-
-    alert(
-      "ID Peserta tidak ditemukan pada data peserta."
-    );
-
-    return;
-
-  }
 
 
   el("pencarian").style.display =
@@ -2555,18 +2333,12 @@ function pilihPeserta(
 
 
 // =====================================================
-// TAMPILKAN PESERTA
+// TAMPILKAN DATA PESERTA
 // =====================================================
 
 function tampilkanPeserta(
   peserta
 ) {
-
-  peserta =
-    normalisasiPeserta(
-      peserta
-    );
-
 
   const hasil =
     el("hasil");
@@ -2617,8 +2389,8 @@ function tampilkanPeserta(
 
   const pembayaranLunas =
 
-    statusPembayaran.toLowerCase() ===
-    "lunas";
+    statusPembayaran ===
+    "Lunas";
 
 
   if (idPeserta) {
@@ -2815,9 +2587,7 @@ function tampilkanPeserta(
 
       ${
         !sudahRegistrasi && idPeserta
-
           ? `
-
             <div class="row">
 
               <div class="label">
@@ -2835,11 +2605,8 @@ function tampilkanPeserta(
               </div>
 
             </div>
-
           `
-
           : ""
-
       }
 
 
@@ -3020,7 +2787,7 @@ function tampilkanPeserta(
 
 
 // =====================================================
-// TIDAK DITEMUKAN
+// PESERTA TIDAK DITEMUKAN
 // =====================================================
 
 function tampilkanPesertaTidakDitemukan(
@@ -3177,14 +2944,19 @@ function tampilkanErrorAPI() {
 // REGISTRASI PESERTA
 // =====================================================
 //
-// API tetap menerima:
+// API menerima:
+//
+// ID Peserta
+//
+// contoh:
 //
 // MW46-001
 //
-// API membuat:
+// API menghasilkan:
 //
 // A-001
 //
+// ID Peserta TIDAK PERNAH diganti menjadi A-001.
 // =====================================================
 
 async function registrasiPeserta() {
@@ -3228,6 +3000,12 @@ async function registrasiPeserta() {
 
   button.textContent =
     "⏳ MEMPROSES...";
+
+
+  console.log(
+    "Registrasi menggunakan ID Peserta:",
+    idPesertaAktif
+  );
 
 
   try {
@@ -3292,12 +3070,15 @@ async function registrasiPeserta() {
         status.textContent =
           "Sudah Registrasi";
 
-
         status.className =
           "status status-sudah";
 
       }
 
+
+      // =================================================
+      // GANTI TAMPILAN ID UTAMA MENJADI NOMOR PESERTA
+      // =================================================
 
       const nomorLabel =
         document.querySelector(
@@ -3339,10 +3120,20 @@ async function registrasiPeserta() {
         `;
 
 
-        nomorElement.remove();
+        if (
+          nomorElement.parentNode
+        ) {
+
+          nomorElement.remove();
+
+        }
 
       }
 
+
+      // =================================================
+      // UPDATE WAKTU
+      // =================================================
 
       const waktuBaru =
         formatWaktu(
@@ -3371,6 +3162,50 @@ async function registrasiPeserta() {
           </strong>
 
         `;
+
+      }
+
+      else {
+
+        const dataContainer =
+          document.querySelector(
+            ".data"
+          );
+
+
+        if (dataContainer) {
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+
+          div.className =
+            "waktu";
+
+
+          div.innerHTML = `
+
+            Waktu Registrasi:<br>
+
+            <strong>
+
+              ${escapeHTML(
+                waktuBaru
+              )}
+
+            </strong>
+
+          `;
+
+
+          dataContainer.insertBefore(
+            div,
+            button
+          );
+
+        }
 
       }
 
@@ -3530,7 +3365,6 @@ document.addEventListener(
   "DOMContentLoaded",
 
   function() {
-
 
     el("mulaiButton")
       .addEventListener(
