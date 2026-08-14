@@ -7,561 +7,311 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <title>Registrasi Ulang Lomba</title>
-
-  <!-- =====================================================
-       HTML5 QR CODE
-       ===================================================== -->
-
-  <script
-    src="https://unpkg.com/html5-qrcode"
-    type="text/javascript">
-  </script>
+  <title>Registrasi Ulang Peserta</title>
 
 
   <style>
-
-    /* =====================================================
-       RESET
-       ===================================================== */
 
     * {
       box-sizing: border-box;
     }
 
 
-    /* =====================================================
-       BODY
-       ===================================================== */
-
     body {
+
+      margin: 0;
+
+      padding: 20px;
 
       font-family:
         Arial,
+        Helvetica,
         sans-serif;
 
-      background:
-        #f4f7fb;
+      background: #f4f6f8;
 
-      margin:
-        0;
-
-      padding:
-        20px;
-
-      text-align:
-        center;
-
-      color:
-        #222;
+      color: #222;
 
     }
 
-
-    /* =====================================================
-       CONTAINER
-       ===================================================== */
 
     .container {
 
-      width:
-        100%;
+      max-width: 600px;
 
-      max-width:
-        500px;
-
-      margin:
-        auto;
+      margin: 0 auto;
 
     }
 
 
-    /* =====================================================
-       JUDUL
-       ===================================================== */
+    .card {
+
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 24px;
+
+      box-shadow:
+        0 4px 20px rgba(0,0,0,0.08);
+
+      margin-bottom: 20px;
+
+    }
+
 
     h1 {
 
-      color:
-        #062b78;
+      text-align: center;
 
-      margin:
-        0 0 5px 0;
+      margin-top: 0;
 
-      font-size:
-        32px;
+      margin-bottom: 8px;
+
+      font-size: 25px;
 
     }
 
 
     .subtitle {
 
-      color:
-        #555;
+      text-align: center;
 
-      margin-bottom:
-        25px;
+      color: #666;
 
-      font-size:
-        18px;
-
-      line-height:
-        1.4;
+      margin-bottom: 25px;
 
     }
 
 
-    /* =====================================================
-       BUTTON UMUM
-       ===================================================== */
+    h2 {
+
+      margin-top: 0;
+
+      font-size: 20px;
+
+    }
+
+
+    .scanner-box {
+
+      position: relative;
+
+      width: 100%;
+
+      aspect-ratio: 1 / 1;
+
+      background: #111;
+
+      border-radius: 14px;
+
+      overflow: hidden;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    #video {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+
+    .scanner-frame {
+
+      position: absolute;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      width: 65%;
+
+      height: 65%;
+
+      border: 3px solid white;
+
+      border-radius: 15px;
+
+      pointer-events: none;
+
+    }
+
+
+    .scanner-info {
+
+      text-align: center;
+
+      color: #666;
+
+      font-size: 14px;
+
+      margin-bottom: 15px;
+
+    }
+
 
     button {
 
-      width:
-        100%;
+      width: 100%;
 
-      border:
-        none;
+      border: none;
 
-      padding:
-        15px;
+      border-radius: 10px;
 
-      border-radius:
-        10px;
+      padding: 13px;
 
-      font-size:
-        16px;
+      font-size: 16px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
 
-      cursor:
-        pointer;
-
-      background:
-        #0b3d91;
-
-      color:
-        white;
-
-      margin-top:
-        10px;
-
-      transition:
-        opacity 0.2s ease,
-        transform 0.1s ease;
+      cursor: pointer;
 
     }
 
 
-    button:active {
+    .btn-primary {
 
-      transform:
-        scale(0.99);
+      background: #1976d2;
+
+      color: white;
+
+    }
+
+
+    .btn-success {
+
+      background: #2e7d32;
+
+      color: white;
+
+    }
+
+
+    .btn-danger {
+
+      background: #c62828;
+
+      color: white;
 
     }
 
 
     button:disabled {
 
-      background:
-        #999;
+      background: #bdbdbd;
 
-      cursor:
-        not-allowed;
-
-      transform:
-        none;
+      cursor: not-allowed;
 
     }
 
 
-    /* =====================================================
-       MENU UTAMA
-       ===================================================== */
+    .manual-search {
 
-    #menuUtama {
+      display: flex;
 
-      display:
-        block;
+      gap: 8px;
 
     }
 
 
-    /* =====================================================
-       READER / KAMERA
-       ===================================================== */
+    .manual-search input {
 
-    #reader {
+      flex: 1;
 
-      background:
-        white;
-
-      padding:
-        10px;
-
-      border-radius:
-        15px;
-
-      margin-top:
-        20px;
-
-      overflow:
-        hidden;
-
-    }
-
-
-    #reader:empty {
-
-      display:
-        none;
-
-    }
-
-
-    /* =====================================================
-       HASIL PESERTA
-       ===================================================== */
-
-    #hasil {
-
-      display:
-        none;
-
-      background:
-        white;
-
-      padding:
-        20px;
-
-      border-radius:
-        15px;
-
-      margin-top:
-        20px;
-
-      box-shadow:
-        0 3px 12px
-        rgba(0,0,0,0.12);
-
-      text-align:
-        left;
-
-    }
-
-
-    /* =====================================================
-       PENCARIAN
-       ===================================================== */
-
-    #pencarian {
-
-      display:
-        none;
-
-      background:
-        white;
-
-      padding:
-        20px;
-
-      border-radius:
-        15px;
-
-      margin-top:
-        20px;
-
-      box-shadow:
-        0 3px 12px
-        rgba(0,0,0,0.12);
-
-    }
-
-
-    .search-input {
-
-      width:
-        100%;
-
-      padding:
-        14px;
+      padding: 12px;
 
       border:
         1px solid #ccc;
 
-      border-radius:
-        10px;
+      border-radius: 9px;
 
-      font-size:
-        16px;
-
-      margin-top:
-        10px;
-
-      outline:
-        none;
+      font-size: 15px;
 
     }
 
 
-    .search-input:focus {
+    .manual-search button {
 
-      border-color:
-        #0b3d91;
+      width: auto;
 
-    }
+      padding-left: 18px;
 
-
-    .search-button {
-
-      background:
-        #0b3d91;
+      padding-right: 18px;
 
     }
 
 
-    /* =====================================================
-       HASIL PENCARIAN
-       ===================================================== */
+    .status-message {
 
-    .result-count {
+      padding: 12px;
 
-      margin-top:
-        20px;
+      border-radius: 9px;
 
-      font-weight:
-        bold;
+      margin-top: 15px;
 
-      color:
-        #555;
+      display: none;
 
-      text-align:
-        left;
+      font-size: 14px;
 
     }
 
 
-    .result-card {
+    .status-info {
 
-      background:
-        #f8f9fa;
+      background: #e3f2fd;
 
-      border:
-        1px solid #ddd;
-
-      border-radius:
-        10px;
-
-      padding:
-        15px;
-
-      margin-top:
-        12px;
-
-      text-align:
-        left;
+      color: #1565c0;
 
     }
 
 
-    .result-number {
+    .status-success {
 
-      color:
-        #062b78;
+      background: #e8f5e9;
 
-      font-size:
-        20px;
-
-      font-weight:
-        bold;
+      color: #2e7d32;
 
     }
 
 
-    .result-name {
+    .status-error {
 
-      font-size:
-        17px;
+      background: #ffebee;
 
-      font-weight:
-        bold;
-
-      margin-top:
-        5px;
+      color: #c62828;
 
     }
 
 
-    .result-detail {
+    .participant {
 
-      color:
-        #666;
-
-      margin-top:
-        7px;
-
-      font-size:
-        14px;
-
-      line-height:
-        1.5;
+      display: none;
 
     }
 
 
-    .choose-button {
+    .data-row {
 
-      background:
-        #198754;
+      display: flex;
 
-      margin-top:
-        12px;
+      justify-content: space-between;
 
-    }
+      gap: 15px;
 
-
-    /* =====================================================
-       SUCCESS
-       ===================================================== */
-
-    .success {
-
-      background:
-        #e8f8ed;
-
-      border:
-        1px solid #54b86b;
-
-      color:
-        #176b2b;
-
-      padding:
-        15px;
-
-      border-radius:
-        10px;
-
-      font-weight:
-        bold;
-
-      text-align:
-        center;
-
-      font-size:
-        18px;
-
-    }
-
-
-    /* =====================================================
-       ERROR
-       ===================================================== */
-
-    .error {
-
-      background:
-        #fdeaea;
-
-      border:
-        1px solid #e58b87;
-
-      color:
-        #9b1c18;
-
-      padding:
-        15px;
-
-      border-radius:
-        10px;
-
-      font-weight:
-        bold;
-
-      text-align:
-        center;
-
-      margin-top:
-        10px;
-
-      line-height:
-        1.5;
-
-    }
-
-
-    /* =====================================================
-       NOMOR / ID PESERTA
-       ===================================================== */
-
-    .nomor {
-
-      font-size:
-        28px;
-
-      margin:
-        20px 0;
-
-      font-weight:
-        bold;
-
-      text-align:
-        center;
-
-      color:
-        #062b78;
-
-      word-break:
-        break-word;
-
-    }
-
-
-    /* =====================================================
-       LABEL NOMOR
-       ===================================================== */
-
-    .nomor-label {
-
-      text-align:
-        center;
-
-      color:
-        #777;
-
-      font-size:
-        14px;
-
-      font-weight:
-        normal;
-
-      margin-top:
-        18px;
-
-      margin-bottom:
-        -12px;
-
-    }
-
-
-    /* =====================================================
-       DATA PESERTA
-       ===================================================== */
-
-    .data {
-
-      margin-top:
-        15px;
-
-    }
-
-
-    .row {
-
-      padding:
-        12px 0;
+      padding: 11px 0;
 
       border-bottom:
         1px solid #eee;
@@ -569,276 +319,183 @@
     }
 
 
+    .data-row:last-child {
+
+      border-bottom: none;
+
+    }
+
+
     .label {
 
-      font-size:
-        14px;
+      color: #666;
 
-      color:
-        #777;
+      font-size: 14px;
 
-      margin-bottom:
-        4px;
+      min-width: 150px;
 
     }
 
 
     .value {
 
-      font-size:
-        18px;
+      font-weight: bold;
 
-      font-weight:
-        bold;
+      text-align: right;
 
-      color:
-        #222;
-
-      line-height:
-        1.4;
-
-      word-break:
-        break-word;
-
-    }
-
-
-    /* =====================================================
-       STATUS
-       ===================================================== */
-
-    .status {
-
-      padding:
-        11px;
-
-      border-radius:
-        8px;
-
-      text-align:
-        center;
-
-      margin-top:
-        5px;
-
-      font-weight:
-        bold;
-
-      font-size:
-        17px;
-
-    }
-
-
-    .status-lunas {
-
-      background:
-        #e8f8ed;
-
-      color:
-        #176b2b;
+      word-break: break-word;
 
     }
 
 
     .status-belum {
 
-      background:
-        #fff4d6;
-
-      color:
-        #8a5a00;
+      color: #ef6c00;
 
     }
 
 
     .status-sudah {
 
-      background:
-        #e8f8ed;
-
-      color:
-        #176b2b;
+      color: #2e7d32;
 
     }
 
 
-    /* =====================================================
-       LOADING
-       ===================================================== */
+    .registration-result {
+
+      display: none;
+
+      text-align: center;
+
+      padding: 20px;
+
+      border-radius: 12px;
+
+      background: #e8f5e9;
+
+      margin-top: 20px;
+
+    }
+
+
+    .registration-result .nomor {
+
+      font-size: 34px;
+
+      font-weight: bold;
+
+      margin: 10px 0;
+
+      color: #2e7d32;
+
+    }
+
+
+    .registration-result .id {
+
+      font-size: 14px;
+
+      color: #666;
+
+    }
+
 
     .loading {
 
-      text-align:
-        center;
+      display: none;
 
-      padding:
-        20px;
+      text-align: center;
 
-      color:
-        #555;
+      padding: 15px;
 
-      font-weight:
-        bold;
-
-      line-height:
-        1.5;
+      color: #555;
 
     }
 
 
-    /* =====================================================
-       BUTTON SEKUNDER
-       ===================================================== */
+    .search-results {
 
-    .secondary-button {
-
-      background:
-        #555;
+      margin-top: 15px;
 
     }
 
 
-    /* =====================================================
-       BUTTON REGISTRASI
-       ===================================================== */
-
-    .registrasi-button {
-
-      background:
-        #198754;
-
-      margin-top:
-        20px;
-
-    }
-
-
-    /* =====================================================
-       WAKTU
-       ===================================================== */
-
-    .waktu {
-
-      text-align:
-        center;
-
-      margin-top:
-        15px;
-
-      color:
-        #555;
-
-      font-size:
-        14px;
-
-      line-height:
-        1.5;
-
-    }
-
-
-    /* =====================================================
-       NOMOR SETELAH REGISTRASI
-       ===================================================== */
-
-    .nomor-registrasi {
-
-      text-align:
-        center;
-
-      margin:
-        20px 0;
-
-      padding:
-        15px;
-
-      background:
-        #eef4ff;
+    .search-item {
 
       border:
-        1px solid #b8cdf5;
+        1px solid #ddd;
 
-      border-radius:
-        12px;
+      border-radius: 10px;
 
-    }
+      padding: 12px;
 
+      margin-bottom: 10px;
 
-    .nomor-registrasi-label {
+      cursor: pointer;
 
-      color:
-        #666;
-
-      font-size:
-        14px;
-
-      margin-bottom:
-        5px;
+      background: white;
 
     }
 
 
-    .nomor-registrasi-value {
+    .search-item:hover {
 
-      color:
-        #062b78;
-
-      font-size:
-        30px;
-
-      font-weight:
-        bold;
-
-      word-break:
-        break-word;
+      background: #f5f5f5;
 
     }
 
 
-    /* =====================================================
-       RESPONSIVE
-       ===================================================== */
+    .search-item-name {
 
-    @media (max-width: 600px) {
+      font-weight: bold;
+
+    }
+
+
+    .search-item-id {
+
+      font-size: 13px;
+
+      color: #666;
+
+      margin-top: 4px;
+
+    }
+
+
+    .search-item-number {
+
+      font-size: 13px;
+
+      color: #1976d2;
+
+      margin-top: 4px;
+
+    }
+
+
+    @media (max-width: 500px) {
 
       body {
-
-        padding:
-          15px;
-
+        padding: 10px;
       }
 
-
-      h1 {
-
-        font-size:
-          28px;
-
+      .card {
+        padding: 18px;
       }
 
-
-      .subtitle {
-
-        font-size:
-          17px;
-
+      .data-row {
+        flex-direction: column;
+        gap: 4px;
       }
 
-
-      .nomor {
-
-        font-size:
-          26px;
-
+      .value {
+        text-align: left;
       }
 
-
-      .nomor-registrasi-value {
-
-        font-size:
-          27px;
-
+      .label {
+        min-width: unset;
       }
 
     }
@@ -854,133 +511,318 @@
 <div class="container">
 
 
-  <!-- =====================================================
-       JUDUL
-       ===================================================== -->
+  <!-- ================================================= -->
+  <!-- HEADER -->
+  <!-- ================================================= -->
 
-  <h1>
-    REGISTRASI ULANG
-  </h1>
+  <div class="card">
 
+    <h1>
+      REGISTRASI ULANG PESERTA
+    </h1>
 
-  <div class="subtitle">
-
-    Lomba Mewarnai &amp; Menggambar<br>
-
-    TVRI Sulawesi Barat
-
-  </div>
-
-
-  <!-- =====================================================
-       MENU UTAMA
-       ===================================================== -->
-
-  <div id="menuUtama">
+    <div class="subtitle">
+      Lomba Mewarnai & Menggambar
+      <br>
+      TVRI Sulawesi Barat
+    </div>
 
 
-    <button
-      id="mulaiButton"
-      type="button">
+    <!-- ================================================= -->
+    <!-- SCANNER -->
+    <!-- ================================================= -->
 
-      📷 MULAI SCAN QR CODE
+    <div class="scanner-box">
 
-    </button>
+      <video
+        id="video"
+        autoplay
+        playsinline
+      ></video>
 
-
-    <button
-      id="cariManualButton"
-      class="secondary-button"
-      type="button">
-
-      🔎 CARI PESERTA MANUAL
-
-    </button>
-
-
-  </div>
-
-
-  <!-- =====================================================
-       AREA KAMERA
-       ===================================================== -->
-
-  <div id="reader"></div>
-
-
-  <!-- =====================================================
-       AREA PENCARIAN
-       ===================================================== -->
-
-  <div id="pencarian">
-
-
-    <h2
-      style="
-        color:#062b78;
-        margin-top:0;
-      ">
-
-      🔎 CARI PESERTA
-
-    </h2>
-
-
-    <div
-      style="
-        color:#666;
-        margin-bottom:10px;
-        line-height:1.5;
-      ">
-
-      Masukkan ID Peserta, nomor peserta,
-      atau nama peserta
+      <div class="scanner-frame"></div>
 
     </div>
 
 
-    <input
-      id="inputPencarian"
-      class="search-input"
-      type="text"
-      placeholder="Contoh: MW46-001 atau Annisa">
+    <div class="scanner-info">
+      Arahkan QR Code kartu peserta
+      ke kamera
+    </div>
 
 
     <button
-      id="searchButton"
-      class="search-button"
-      type="button">
-
-      🔎 CARI PESERTA
-
+      id="startButton"
+      class="btn-primary"
+      onclick="mulaiScanner()"
+    >
+      MULAI SCAN QR
     </button>
-
-
-    <div id="hasilPencarian"></div>
 
 
     <button
-      id="kembaliDariPencarianButton"
-      class="secondary-button"
-      type="button">
-
-      ← KEMBALI
-
+      id="stopButton"
+      class="btn-danger"
+      onclick="berhentiScanner()"
+      style="display:none; margin-top:10px;"
+    >
+      BERHENTI SCAN
     </button>
+
+
+    <div
+      id="message"
+      class="status-message"
+    ></div>
 
 
   </div>
 
 
-  <!-- =====================================================
-       HASIL PESERTA
-       ===================================================== -->
+  <!-- ================================================= -->
+  <!-- PENCARIAN MANUAL -->
+  <!-- ================================================= -->
 
-  <div id="hasil"></div>
+  <div class="card">
+
+    <h2>
+      Pencarian Manual
+    </h2>
+
+    <div class="manual-search">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Masukkan ID atau nama peserta"
+        onkeydown="handleEnter(event)"
+      >
+
+      <button
+        class="btn-primary"
+        onclick="cariManual()"
+      >
+        CARI
+      </button>
+
+    </div>
+
+
+    <div
+      id="searchLoading"
+      class="loading"
+    >
+      Mencari peserta...
+    </div>
+
+
+    <div
+      id="searchResults"
+      class="search-results"
+    ></div>
+
+  </div>
+
+
+  <!-- ================================================= -->
+  <!-- DATA PESERTA -->
+  <!-- ================================================= -->
+
+  <div
+    id="participantCard"
+    class="card participant"
+  >
+
+    <h2>
+      DATA PESERTA
+    </h2>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        ID Peserta
+      </div>
+
+      <div
+        id="idPeserta"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Nomor Peserta
+      </div>
+
+      <div
+        id="nomorPeserta"
+        class="value"
+      >
+        -
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Nama Peserta
+      </div>
+
+      <div
+        id="namaPeserta"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Usia
+      </div>
+
+      <div
+        id="usiaPeserta"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Nama Orang Tua
+      </div>
+
+      <div
+        id="orangtuaPeserta"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Kategori
+      </div>
+
+      <div
+        id="kategoriPeserta"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Status Pembayaran
+      </div>
+
+      <div
+        id="statusPembayaran"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Status Registrasi
+      </div>
+
+      <div
+        id="statusRegistrasi"
+        class="value"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="data-row">
+
+      <div class="label">
+        Waktu Registrasi
+      </div>
+
+      <div
+        id="waktuRegistrasi"
+        class="value"
+      >
+        -
+      </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- TOMBOL REGISTRASI -->
+    <!-- ================================================= -->
+
+    <button
+      id="registerButton"
+      class="btn-success"
+      onclick="registrasiPeserta()"
+      style="margin-top:20px;"
+    >
+      REGISTRASI PESERTA
+    </button>
+
+
+    <!-- ================================================= -->
+    <!-- HASIL REGISTRASI -->
+    <!-- ================================================= -->
+
+    <div
+      id="registrationResult"
+      class="registration-result"
+    >
+
+      <div>
+        REGISTRASI BERHASIL
+      </div>
+
+
+      <div
+        id="resultNomor"
+        class="nomor"
+      >
+      </div>
+
+
+      <div
+        id="resultId"
+        class="id"
+      >
+      </div>
+
+    </div>
+
+
+  </div>
 
 
 </div>
-
 
 
 <script>
@@ -991,611 +833,69 @@
 // =====================================================
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbyCnvBr41uRfF8FUt-ZmbeF1j7pcazsqBvnSVLkreITP1YYK7ZIvmwlhkFJA1Px9qso/exec";
+  'https://script.google.com/macros/s/AKfycbyvLZPdoX5wdF-xKKvopYhiUmxC9lTd48EW2_7fEN_528q3RITDzpHJiuWQafE5WSxu/exec';
 
 
 // =====================================================
 // VARIABEL GLOBAL
 // =====================================================
 
-let scanner = null;
+let pesertaAktif = null;
 
-let sudahScan = false;
+let stream = null;
 
+let scanning = false;
 
-// =====================================================
-// PENTING
-// =====================================================
-//
-// Variabel ini SELALU menyimpan ID PESERTA.
-//
-// Contoh:
-// MW46-001
-//
-// BUKAN nomor peserta hasil registrasi.
-//
-// Nomor peserta seperti A-001 hanya digunakan
-// setelah API mengembalikannya ketika registrasi
-// berhasil.
-// =====================================================
-
-let idPesertaAktif = "";
-
-
-let nomorPesertaHasilRegistrasi = "";
-
-let hasilPesertaManual = [];
-
-let sedangMencari = false;
-
-let sedangRegistrasi = false;
+let scanTimer = null;
 
 
 // =====================================================
-// HELPER ELEMENT
+// ELEMENT
 // =====================================================
 
-function el(id) {
+const video =
+  document.getElementById('video');
 
-  return document.getElementById(id);
+const startButton =
+  document.getElementById('startButton');
+
+const stopButton =
+  document.getElementById('stopButton');
+
+
+// =====================================================
+// MESSAGE
+// =====================================================
+
+function tampilkanPesan(
+  pesan,
+  tipe = 'info'
+) {
+
+  const element =
+    document.getElementById('message');
+
+
+  element.textContent =
+    pesan;
+
+
+  element.className =
+    'status-message status-' +
+    tipe;
+
+
+  element.style.display =
+    'block';
 
 }
 
 
-// =====================================================
-// ESCAPE HTML
-// =====================================================
-//
-// Mencegah data dari spreadsheet merusak HTML.
-// =====================================================
-
-function escapeHTML(value) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
-
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-// =====================================================
-// FORMAT WAKTU
-// =====================================================
-
-function formatWaktu(waktu) {
-
-  if (
-    waktu === null ||
-    waktu === undefined ||
-    waktu === ""
-  ) {
-
-    return "";
-
-  }
-
-
-  try {
-
-    let tanggal;
-
-
-    // ===================================================
-    // 1. OBJECT DATE
-    // ===================================================
-
-    if (
-      waktu instanceof Date
-    ) {
-
-      tanggal =
-        waktu;
-
-    }
-
-
-    // ===================================================
-    // 2. ANGKA
-    // ===================================================
-
-    else if (
-      typeof waktu === "number"
-    ) {
-
-      if (
-        waktu > 100000000000
-      ) {
-
-        tanggal =
-          new Date(waktu);
-
-      }
-
-      else if (
-        waktu > 1000000000
-      ) {
-
-        tanggal =
-          new Date(
-            waktu * 1000
-          );
-
-      }
-
-      else {
-
-        tanggal =
-          new Date(
-            (
-              waktu - 25569
-            ) *
-            86400000
-          );
-
-      }
-
-    }
-
-
-    // ===================================================
-    // 3. STRING
-    // ===================================================
-
-    else {
-
-      const nilai =
-        String(waktu).trim();
-
-
-      // ISO
-
-      if (
-        /^\d{4}-\d{2}-\d{2}T/.test(
-          nilai
-        )
-      ) {
-
-        tanggal =
-          new Date(nilai);
-
-      }
-
-
-      // YYYY-MM-DD HH:mm:ss
-
-      else if (
-        /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}/.test(
-          nilai
-        )
-      ) {
-
-        const bagian =
-          nilai.split(/\s+/);
-
-        const tanggalBagian =
-          bagian[0].split("-");
-
-        const waktuBagian =
-          (
-            bagian[1] ||
-            "00:00:00"
-          ).split(":");
-
-
-        tanggal =
-          new Date(
-
-            Number(
-              tanggalBagian[0]
-            ),
-
-            Number(
-              tanggalBagian[1]
-            ) - 1,
-
-            Number(
-              tanggalBagian[2]
-            ),
-
-            Number(
-              waktuBagian[0]
-            ),
-
-            Number(
-              waktuBagian[1]
-            ),
-
-            Number(
-              waktuBagian[2] || 0
-            )
-
-          );
-
-      }
-
-
-      // DD/MM/YYYY HH:mm:ss
-
-      else if (
-        /^\d{2}\/\d{2}\/\d{4}/.test(
-          nilai
-        )
-      ) {
-
-        const bersih =
-          nilai.replace(
-            ",",
-            " "
-          );
-
-
-        const bagian =
-          bersih.split(/\s+/);
-
-
-        const tanggalBagian =
-          bagian[0].split("/");
-
-
-        const waktuBagian =
-          (
-            bagian[1] ||
-            "00:00:00"
-          ).split(":");
-
-
-        tanggal =
-          new Date(
-
-            Number(
-              tanggalBagian[2]
-            ),
-
-            Number(
-              tanggalBagian[1]
-            ) - 1,
-
-            Number(
-              tanggalBagian[0]
-            ),
-
-            Number(
-              waktuBagian[0]
-            ),
-
-            Number(
-              waktuBagian[1]
-            ),
-
-            Number(
-              waktuBagian[2] || 0
-            )
-
-          );
-
-      }
-
-
-      else {
-
-        tanggal =
-          new Date(nilai);
-
-      }
-
-    }
-
-
-    if (
-      !tanggal ||
-      isNaN(
-        tanggal.getTime()
-      )
-    ) {
-
-      console.warn(
-        "Format waktu tidak dikenali:",
-        waktu
-      );
-
-      return String(waktu);
-
-    }
-
-
-    return tanggal.toLocaleString(
-
-      "id-ID",
-
-      {
-
-        day:
-          "2-digit",
-
-        month:
-          "2-digit",
-
-        year:
-          "numeric",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hour12:
-          false,
-
-        timeZone:
-          "Asia/Makassar"
-
-      }
-
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Gagal memformat waktu:",
-      waktu,
-      error
-    );
-
-
-    return String(waktu);
-
-  }
-
-}
-
-
-// =====================================================
-// HENTIKAN SCANNER
-// =====================================================
-
-async function hentikanScanner() {
-
-  if (!scanner) {
-
-    return;
-
-  }
-
-
-  const scannerYangDihentikan =
-    scanner;
-
-
-  scanner =
-    null;
-
-
-  try {
-
-    await scannerYangDihentikan.stop();
-
-  }
-
-  catch (error) {
-
-    console.log(
-      "Scanner sudah berhenti:",
-      error
-    );
-
-  }
-
-
-  try {
-
-    await scannerYangDihentikan.clear();
-
-  }
-
-  catch (error) {
-
-    console.log(
-      "Reader sudah dibersihkan:",
-      error
-    );
-
-  }
-
-}
-
-
-// =====================================================
-// RESET TAMPILAN
-// =====================================================
-
-function resetTampilan() {
-
-  el("reader").innerHTML =
-    "";
-
-  el("hasil").innerHTML =
-    "";
-
-  el("hasilPencarian").innerHTML =
-    "";
-
-
-  el("reader").style.display =
-    "none";
-
-  el("hasil").style.display =
-    "none";
-
-  el("pencarian").style.display =
-    "none";
-
-  el("menuUtama").style.display =
-    "block";
-
-
-  el("inputPencarian").value =
-    "";
-
-
-  hasilPesertaManual =
-    [];
-
-  idPesertaAktif =
-    "";
-
-  nomorPesertaHasilRegistrasi =
-    "";
-
-  sudahScan =
-    false;
-
-  sedangMencari =
-    false;
-
-  sedangRegistrasi =
-    false;
-
-}
-
-
-// =====================================================
-// KEMBALI KE MENU
-// =====================================================
-
-async function kembaliKeMenu() {
-
-  if (
-    sedangRegistrasi
-  ) {
-
-    return;
-
-  }
-
-
-  await hentikanScanner();
-
-
-  el("reader").innerHTML =
-    "";
-
-  el("hasil").innerHTML =
-    "";
-
-  el("hasilPencarian").innerHTML =
-    "";
-
-
-  el("reader").style.display =
-    "none";
-
-  el("hasil").style.display =
-    "none";
-
-  el("pencarian").style.display =
-    "none";
-
-
-  el("menuUtama").style.display =
-    "block";
-
-
-  sudahScan =
-    false;
-
-  idPesertaAktif =
-    "";
-
-  nomorPesertaHasilRegistrasi =
-    "";
-
-  hasilPesertaManual =
-    [];
-
-  sedangMencari =
-    false;
-
-
-  el("mulaiButton").disabled =
-    false;
-
-  el("cariManualButton").disabled =
-    false;
-
-}
-
-
-// =====================================================
-// BUKA PENCARIAN MANUAL
-// =====================================================
-
-async function bukaPencarian() {
-
-  await hentikanScanner();
-
-
-  el("menuUtama").style.display =
-    "none";
-
-  el("reader").style.display =
-    "none";
-
-  el("reader").innerHTML =
-    "";
-
-  el("hasil").style.display =
-    "none";
-
-  el("hasil").innerHTML =
-    "";
-
-  el("pencarian").style.display =
-    "block";
-
-  el("hasilPencarian").innerHTML =
-    "";
-
-  el("inputPencarian").value =
-    "";
-
-
-  idPesertaAktif =
-    "";
-
-  nomorPesertaHasilRegistrasi =
-    "";
-
-  sudahScan =
-    false;
-
-
-  setTimeout(
-    function() {
-
-      el("inputPencarian").focus();
-
-    },
-    100
-  );
+function sembunyikanPesan() {
+
+  document.getElementById(
+    'message'
+  ).style.display = 'none';
 
 }
 
@@ -1606,221 +906,193 @@ async function bukaPencarian() {
 
 async function mulaiScanner() {
 
-  await hentikanScanner();
+  sembunyikanPesan();
 
 
-  el("menuUtama").style.display =
-    "none";
+  if (
+    !('BarcodeDetector' in window)
+  ) {
 
-  el("pencarian").style.display =
-    "none";
-
-  el("hasil").style.display =
-    "none";
-
-  el("hasil").innerHTML =
-    "";
-
-  el("reader").innerHTML =
-    "";
-
-  el("reader").style.display =
-    "block";
-
-
-  sudahScan =
-    false;
-
-  idPesertaAktif =
-    "";
-
-  nomorPesertaHasilRegistrasi =
-    "";
-
-
-  scanner =
-    new Html5Qrcode(
-      "reader"
+    tampilkanPesan(
+      'Browser ini belum mendukung scanner QR otomatis. Gunakan pencarian manual.',
+      'error'
     );
-
-
-  const config = {
-
-    fps:
-      10,
-
-    qrbox: {
-
-      width:
-        250,
-
-      height:
-        250
-
-    }
-
-  };
-
-
-  try {
-
-    await scanner.start(
-
-      {
-        facingMode:
-          "environment"
-      },
-
-      config,
-
-      onScanSuccess,
-
-      onScanFailure
-
-    );
-
-
-    console.log(
-      "Kamera berhasil dimulai."
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Kamera gagal:",
-      error
-    );
-
-
-    el("reader").innerHTML = `
-
-      <div class="error">
-
-        ❌ KAMERA TIDAK DAPAT DIAKSES
-
-        <br><br>
-
-        Pastikan izin kamera
-        sudah diberikan.
-
-        <br><br>
-
-        ${escapeHTML(error)}
-
-      </div>
-
-    `;
-
-
-    el("menuUtama").style.display =
-      "block";
-
-  }
-
-}
-
-
-// =====================================================
-// QR BERHASIL DIBACA
-// =====================================================
-
-async function onScanSuccess(
-  decodedText,
-  decodedResult
-) {
-
-  if (sudahScan) {
 
     return;
 
   }
 
 
-  sudahScan =
-    true;
+  try {
+
+    stream =
+      await navigator.mediaDevices
+        .getUserMedia({
+
+          video: {
+            facingMode: {
+              ideal: 'environment'
+            }
+          },
+
+          audio: false
+
+        });
 
 
-  // ===================================================
-  // QR BERISI ID PESERTA
-  // ===================================================
-
-  idPesertaAktif =
-    String(
-      decodedText
-    ).trim();
+    video.srcObject =
+      stream;
 
 
-  console.log(
-    "ID Peserta dari QR:",
-    idPesertaAktif
-  );
+    scanning = true;
 
 
-  await hentikanScanner();
+    startButton.style.display =
+      'none';
 
 
-  tampilkanLoading();
+    stopButton.style.display =
+      'block';
 
 
-  cekPeserta(
-    idPesertaAktif
-  );
+    tampilkanPesan(
+      'Scanner aktif. Arahkan QR Code ke kamera.',
+      'info'
+    );
+
+
+    mulaiDeteksiQR();
+
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+
+    tampilkanPesan(
+      'Kamera tidak dapat digunakan. Pastikan izin kamera sudah diberikan.',
+      'error'
+    );
+
+  }
 
 }
 
 
 // =====================================================
-// QR GAGAL
+// DETEKSI QR
 // =====================================================
 
-function onScanFailure(error) {
+async function mulaiDeteksiQR() {
 
-  // Tidak perlu menampilkan error.
+  const detector =
+    new BarcodeDetector({
+      formats: ['qr_code']
+    });
+
+
+  async function scan() {
+
+    if (!scanning) {
+      return;
+    }
+
+
+    try {
+
+      const barcodes =
+        await detector.detect(video);
+
+
+      if (
+        barcodes.length > 0
+      ) {
+
+        const hasil =
+          barcodes[0].rawValue;
+
+
+        if (hasil) {
+
+          berhentiScanner();
+
+
+          // QR kartu berisi ID Peserta
+          await cekPeserta(hasil);
+
+          return;
+
+        }
+
+      }
+
+    }
+
+    catch (error) {
+
+      console.error(
+        'QR scan error:',
+        error
+      );
+
+    }
+
+
+    scanTimer =
+      requestAnimationFrame(scan);
+
+  }
+
+
+  scan();
 
 }
 
 
 // =====================================================
-// LOADING
+// BERHENTI SCANNER
 // =====================================================
 
-function tampilkanLoading() {
+function berhentiScanner() {
 
-  const hasil =
-    el("hasil");
-
-
-  hasil.style.display =
-    "block";
+  scanning = false;
 
 
-  hasil.innerHTML = `
+  if (scanTimer) {
 
-    <div class="loading">
+    cancelAnimationFrame(
+      scanTimer
+    );
 
-      🔄 MENCARI DATA PESERTA...
+    scanTimer = null;
 
-      <br><br>
+  }
 
-      ID Peserta:
 
-      <strong>
+  if (stream) {
 
-        ${escapeHTML(
-          idPesertaAktif
-        )}
+    stream
+      .getTracks()
+      .forEach(
+        track => track.stop()
+      );
 
-      </strong>
+    stream = null;
 
-      <br><br>
+  }
 
-      Mohon tunggu...
 
-    </div>
+  video.srcObject = null;
 
-  `;
+
+  startButton.style.display =
+    'block';
+
+
+  stopButton.style.display =
+    'none';
 
 }
 
@@ -1829,107 +1101,491 @@ function tampilkanLoading() {
 // CEK PESERTA
 // =====================================================
 
-function cekPeserta(idPeserta) {
+async function cekPeserta(
+  idPeserta
+) {
 
-  fetch(
+  if (!idPeserta) {
 
-    API_URL +
-    "?action=cek&nomor=" +
-    encodeURIComponent(
-      idPeserta
-    ),
+    tampilkanPesan(
+      'ID Peserta kosong.',
+      'error'
+    );
 
-    {
+    return;
 
-      method:
-        "GET",
-
-      cache:
-        "no-store"
-
-    }
-
-  )
-
-  .then(
-    function(response) {
-
-      if (!response.ok) {
-
-        throw new Error(
-          "HTTP Error " +
-          response.status
-        );
-
-      }
+  }
 
 
-      return response.json();
-
-    }
-  )
-
-  .then(
-    function(data) {
-
-      console.log(
-        "Respons API:",
-        data
-      );
-
-
-      if (
-
-        data.success &&
-        data.ditemukan &&
-        data.peserta
-
-      ) {
-
-        // =============================================
-        // PASTIKAN ID PESERTA AKTIF
-        // =============================================
-
-        idPesertaAktif =
-          String(
-            data.peserta.idPeserta ||
-            idPesertaAktif
-          ).trim();
-
-
-        tampilkanPeserta(
-          data.peserta
-        );
-
-      }
-
-      else {
-
-        tampilkanPesertaTidakDitemukan(
-
-          data.message ||
-          "ID Peserta tidak ditemukan."
-
-        );
-
-      }
-
-    }
-  )
-
-  .catch(
-    function(error) {
-
-      console.error(
-        "Error API:",
-        error
-      );
-
-
-      tampilkanErrorAPI();
-
-    }
+  tampilkanPesan(
+    'Mencari data peserta...',
+    'info'
   );
+
+
+  try {
+
+    const url =
+      API_URL +
+      '?action=cek&nomor=' +
+      encodeURIComponent(
+        idPeserta
+      );
+
+
+    const response =
+      await fetch(url);
+
+
+    const data =
+      await response.json();
+
+
+    console.log(
+      'Response cek:',
+      data
+    );
+
+
+    if (
+      !data.success ||
+      !data.ditemukan
+    ) {
+
+      tampilkanPesan(
+        data.message ||
+        'Peserta tidak ditemukan.',
+        'error'
+      );
+
+
+      sembunyikanPeserta();
+
+      return;
+
+    }
+
+
+    tampilkanPeserta(
+      data.peserta
+    );
+
+
+    tampilkanPesan(
+      'Data peserta ditemukan.',
+      'success'
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+
+    tampilkanPesan(
+      'Terjadi kesalahan saat mengambil data peserta.',
+      'error'
+    );
+
+  }
+
+}
+
+
+// =====================================================
+// TAMPILKAN PESERTA
+// =====================================================
+
+function tampilkanPeserta(
+  peserta
+) {
+
+  pesertaAktif =
+    peserta;
+
+
+  document.getElementById(
+    'participantCard'
+  ).style.display = 'block';
+
+
+  document.getElementById(
+    'idPeserta'
+  ).textContent =
+    peserta.idPeserta || '-';
+
+
+  document.getElementById(
+    'nomorPeserta'
+  ).textContent =
+    peserta.nomorPeserta || '-';
+
+
+  document.getElementById(
+    'namaPeserta'
+  ).textContent =
+    peserta.nama || '-';
+
+
+  document.getElementById(
+    'usiaPeserta'
+  ).textContent =
+    peserta.usia || '-';
+
+
+  document.getElementById(
+    'orangtuaPeserta'
+  ).textContent =
+    peserta.orangtua || '-';
+
+
+  document.getElementById(
+    'kategoriPeserta'
+  ).textContent =
+    peserta.kategori || '-';
+
+
+  const statusPembayaran =
+    document.getElementById(
+      'statusPembayaran'
+    );
+
+
+  statusPembayaran.textContent =
+    peserta.statusPembayaran ||
+    '-';
+
+
+  const statusRegistrasi =
+    document.getElementById(
+      'statusRegistrasi'
+    );
+
+
+  statusRegistrasi.textContent =
+    peserta.statusRegistrasi ||
+    '-';
+
+
+  statusRegistrasi.className =
+    'value ' +
+    (
+      peserta.statusRegistrasi ===
+      'Sudah Registrasi'
+        ? 'status-sudah'
+        : 'status-belum'
+    );
+
+
+  document.getElementById(
+    'waktuRegistrasi'
+  ).textContent =
+    peserta.waktuRegistrasi ||
+    '-';
+
+
+  const registerButton =
+    document.getElementById(
+      'registerButton'
+    );
+
+
+  // ===================================================
+  // JIKA SUDAH REGISTRASI
+  // ===================================================
+
+  if (
+    peserta.statusRegistrasi ===
+    'Sudah Registrasi'
+  ) {
+
+    registerButton.disabled =
+      true;
+
+
+    registerButton.textContent =
+      'SUDAH REGISTRASI';
+
+
+  }
+
+  else {
+
+    registerButton.disabled =
+      false;
+
+
+    registerButton.textContent =
+      'REGISTRASI PESERTA';
+
+  }
+
+
+  document.getElementById(
+    'registrationResult'
+  ).style.display =
+    'none';
+
+
+  // Scroll ke data peserta
+
+  document.getElementById(
+    'participantCard'
+  ).scrollIntoView({
+    behavior: 'smooth'
+  });
+
+}
+
+
+// =====================================================
+// SEMBUNYIKAN DATA PESERTA
+// =====================================================
+
+function sembunyikanPeserta() {
+
+  pesertaAktif = null;
+
+
+  document.getElementById(
+    'participantCard'
+  ).style.display =
+    'none';
+
+}
+
+
+// =====================================================
+// REGISTRASI PESERTA
+// =====================================================
+
+async function registrasiPeserta() {
+
+  if (!pesertaAktif) {
+
+    tampilkanPesan(
+      'Belum ada peserta yang dipilih.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  const idPeserta =
+    pesertaAktif.idPeserta;
+
+
+  if (!idPeserta) {
+
+    tampilkanPesan(
+      'ID Peserta tidak tersedia.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  // ===================================================
+  // CEK STATUS
+  // ===================================================
+
+  if (
+    pesertaAktif.statusRegistrasi ===
+    'Sudah Registrasi'
+  ) {
+
+    tampilkanPesan(
+      'Peserta ini sudah melakukan registrasi.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      'registerButton'
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    'MEMPROSES...';
+
+
+  tampilkanPesan(
+    'Sedang melakukan registrasi peserta...',
+    'info'
+  );
+
+
+  try {
+
+    const url =
+      API_URL +
+      '?action=registrasi&nomor=' +
+      encodeURIComponent(
+        idPeserta
+      );
+
+
+    const response =
+      await fetch(url);
+
+
+    const data =
+      await response.json();
+
+
+    console.log(
+      'Response registrasi:',
+      data
+    );
+
+
+    // =================================================
+    // REGISTRASI GAGAL
+    // =================================================
+
+    if (!data.success) {
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        'REGISTRASI PESERTA';
+
+
+      tampilkanPesan(
+        data.message ||
+        'Registrasi gagal.',
+        'error'
+      );
+
+
+      return;
+
+    }
+
+
+    // =================================================
+    // REGISTRASI BERHASIL
+    // =================================================
+
+    pesertaAktif.statusRegistrasi =
+      'Sudah Registrasi';
+
+
+    pesertaAktif.nomorPeserta =
+      data.nomorPeserta;
+
+
+    pesertaAktif.waktuRegistrasi =
+      data.waktu;
+
+
+    // =================================================
+    // UPDATE TAMPILAN
+    // =================================================
+
+    document.getElementById(
+      'nomorPeserta'
+    ).textContent =
+      data.nomorPeserta;
+
+
+    document.getElementById(
+      'statusRegistrasi'
+    ).textContent =
+      'Sudah Registrasi';
+
+
+    document.getElementById(
+      'statusRegistrasi'
+    ).className =
+      'value status-sudah';
+
+
+    document.getElementById(
+      'waktuRegistrasi'
+    ).textContent =
+      data.waktu;
+
+
+    button.disabled =
+      true;
+
+
+    button.textContent =
+      'SUDAH REGISTRASI';
+
+
+    // =================================================
+    // HASIL REGISTRASI
+    // =================================================
+
+    document.getElementById(
+      'resultNomor'
+    ).textContent =
+      data.nomorPeserta;
+
+
+    document.getElementById(
+      'resultId'
+    ).textContent =
+      'ID Peserta: ' +
+      data.idPeserta;
+
+
+    document.getElementById(
+      'registrationResult'
+    ).style.display =
+      'block';
+
+
+    tampilkanPesan(
+      'Registrasi berhasil dilakukan.',
+      'success'
+    );
+
+
+    document.getElementById(
+      'registrationResult'
+    ).scrollIntoView({
+      behavior: 'smooth'
+    });
+
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      'REGISTRASI PESERTA';
+
+
+    tampilkanPesan(
+      'Terjadi kesalahan saat menghubungkan ke server.',
+      'error'
+    );
+
+  }
 
 }
 
@@ -1940,193 +1596,108 @@ function cekPeserta(idPeserta) {
 
 async function cariManual() {
 
-  if (sedangMencari) {
-
-    return;
-
-  }
-
-
   const input =
-    el("inputPencarian");
+    document.getElementById(
+      'searchInput'
+    );
 
 
-  const keyword =
+  const kataKunci =
     input.value.trim();
 
 
-  const hasil =
-    el("hasilPencarian");
+  if (!kataKunci) {
 
-
-  if (!keyword) {
-
-    alert(
-      "Masukkan ID Peserta, nomor peserta, atau nama peserta."
+    tampilkanPesan(
+      'Masukkan ID atau nama peserta.',
+      'error'
     );
-
-
-    input.focus();
 
     return;
 
   }
 
 
-  sedangMencari =
-    true;
-
-
-  hasil.innerHTML = `
-
-    <div class="loading">
-
-      🔄 MENCARI PESERTA...
-
-      <br><br>
-
-      Mohon tunggu...
-
-    </div>
-
-  `;
-
-
-  const url =
-
-    API_URL +
-    "?action=cari&q=" +
-    encodeURIComponent(
-      keyword
+  const loading =
+    document.getElementById(
+      'searchLoading'
     );
+
+
+  const results =
+    document.getElementById(
+      'searchResults'
+    );
+
+
+  loading.style.display =
+    'block';
+
+
+  results.innerHTML =
+    '';
 
 
   try {
 
+    const url =
+      API_URL +
+      '?action=cari&q=' +
+      encodeURIComponent(
+        kataKunci
+      );
+
+
     const response =
-      await fetch(
-
-        url,
-
-        {
-
-          method:
-            "GET",
-
-          cache:
-            "no-store"
-
-        }
-
-      );
+      await fetch(url);
 
 
-    if (!response.ok) {
-
-      throw new Error(
-        "HTTP Error " +
-        response.status
-      );
-
-    }
+    const data =
+      await response.json();
 
 
-    const text =
-      await response.text();
-
-
-    let data;
-
-
-    try {
-
-      data =
-        JSON.parse(text);
-
-    }
-
-    catch (error) {
-
-      throw new Error(
-        "Server tidak mengirim JSON yang valid."
-      );
-
-    }
-
-
-    console.log(
-      "Data pencarian:",
-      data
-    );
+    loading.style.display =
+      'none';
 
 
     if (
-
-      data.success === true &&
-      data.jumlah > 0 &&
-      Array.isArray(data.peserta)
-
+      !data.success ||
+      !data.ditemukan
     ) {
 
-      tampilkanHasilPencarian(
-        data.peserta
-      );
+      results.innerHTML =
+        '<div class="status-message status-error" style="display:block;">' +
+        (
+          data.message ||
+          'Peserta tidak ditemukan.'
+        ) +
+        '</div>';
+
+
+      return;
 
     }
 
-    else {
 
-      hasil.innerHTML = `
-
-        <div class="error">
-
-          ❌ PESERTA TIDAK DITEMUKAN
-
-          <br><br>
-
-          ${
-            escapeHTML(
-              data.message ||
-              "Tidak ada peserta yang cocok."
-            )
-          }
-
-        </div>
-
-      `;
-
-    }
+    tampilkanHasilPencarian(
+      data.peserta
+    );
 
   }
 
   catch (error) {
 
-    console.error(
-      "Error pencarian:",
-      error
-    );
+    console.error(error);
 
 
-    hasil.innerHTML = `
+    loading.style.display =
+      'none';
 
-      <div class="error">
 
-        ❌ GAGAL MENGHUBUNGI SERVER
-
-        <br><br>
-
-        Silakan coba lagi.
-
-      </div>
-
-    `;
-
-  }
-
-  finally {
-
-    sedangMencari =
-      false;
+    results.innerHTML =
+      '<div class="status-message status-error" style="display:block;">' +
+      'Terjadi kesalahan saat mencari peserta.' +
+      '</div>';
 
   }
 
@@ -2141,774 +1712,127 @@ function tampilkanHasilPencarian(
   pesertaList
 ) {
 
-  const hasil =
-    el("hasilPencarian");
+  const results =
+    document.getElementById(
+      'searchResults'
+    );
 
 
-  hasilPesertaManual =
-    pesertaList;
-
-
-  let html = `
-
-    <div class="result-count">
-
-      Ditemukan
-      ${pesertaList.length}
-      peserta
-
-    </div>
-
-  `;
+  results.innerHTML =
+    '';
 
 
   pesertaList.forEach(
-
-    function(peserta, index) {
-
-      // ===============================================
-      // TENTUKAN NOMOR YANG DITAMPILKAN
-      // ===============================================
-      //
-      // Jika sudah registrasi:
-      // tampilkan Nomor Peserta.
-      //
-      // Jika belum:
-      // tampilkan ID Peserta.
-      // ===============================================
-
-      const sudahRegistrasi =
-
-        String(
-          peserta.statusRegistrasi || ""
-        ).trim() ===
-        "Sudah Registrasi";
+    function(peserta) {
 
 
-      const nomorTampilan =
-
-        sudahRegistrasi
-
-          ? (
-              peserta.nomor ||
-              peserta.idPeserta ||
-              "-"
-            )
-
-          : (
-              peserta.idPeserta ||
-              peserta.nomor ||
-              "-"
-            );
+      const item =
+        document.createElement(
+          'div'
+        );
 
 
-      html += `
-
-        <div class="result-card">
-
-          <div class="result-number">
-
-            ${escapeHTML(
-              nomorTampilan
-            )}
-
-          </div>
+      item.className =
+        'search-item';
 
 
-          <div class="result-name">
-
-            ${escapeHTML(
-              peserta.nama || "-"
-            )}
-
-          </div>
+      const nama =
+        document.createElement(
+          'div'
+        );
 
 
-          <div class="result-detail">
-
-            ID Peserta:
-            ${escapeHTML(
-              peserta.idPeserta || "-"
-            )}
-
-            <br>
-
-            Nomor Peserta:
-            ${escapeHTML(
-              peserta.nomor || "Belum ditentukan"
-            )}
-
-            <br>
-
-            Usia:
-            ${escapeHTML(
-              peserta.usia || "-"
-            )}
-
-            <br>
-
-            Kategori:
-            ${escapeHTML(
-              peserta.kategori || "-"
-            )}
-
-            <br>
-
-            Status:
-            ${escapeHTML(
-              peserta.statusRegistrasi || "-"
-            )}
-
-          </div>
+      nama.className =
+        'search-item-name';
 
 
-          <button
-            class="choose-button"
-            type="button"
-            data-index="${index}">
-
-            👤 PILIH PESERTA
-
-          </button>
-
-        </div>
-
-      `;
-
-    }
-
-  );
+      nama.textContent =
+        peserta.nama || '-';
 
 
-  hasil.innerHTML =
-    html;
+      const id =
+        document.createElement(
+          'div'
+        );
 
 
-  const tombolPilih =
-    hasil.querySelectorAll(
-      ".choose-button"
-    );
+      id.className =
+        'search-item-id';
 
 
-  tombolPilih.forEach(
+      id.textContent =
+        'ID Peserta: ' +
+        (
+          peserta.idPeserta ||
+          '-'
+        );
 
-    function(button) {
 
-      button.addEventListener(
+      const nomor =
+        document.createElement(
+          'div'
+        );
 
-        "click",
 
+      nomor.className =
+        'search-item-number';
+
+
+      nomor.textContent =
+        'Nomor Peserta: ' +
+        (
+          peserta.nomorPeserta ||
+          '-'
+        );
+
+
+      item.appendChild(
+        nama
+      );
+
+
+      item.appendChild(
+        id
+      );
+
+
+      item.appendChild(
+        nomor
+      );
+
+
+      item.onclick =
         function() {
 
-          const index =
-            Number(
-              button.dataset.index
-            );
-
-
-          pilihPesertaDariIndex(
-            index
+          tampilkanPeserta(
+            peserta
           );
 
-        }
+        };
 
+
+      results.appendChild(
+        item
       );
 
     }
-
   );
 
 }
 
 
 // =====================================================
-// PILIH PESERTA DARI HASIL PENCARIAN
+// ENTER PENCARIAN
 // =====================================================
 
-function pilihPesertaDariIndex(
-  index
-) {
+function handleEnter(event) {
 
   if (
-    !Array.isArray(
-      hasilPesertaManual
-    )
+    event.key ===
+    'Enter'
   ) {
 
-    return;
-
-  }
-
-
-  if (
-    !hasilPesertaManual[index]
-  ) {
-
-    return;
-
-  }
-
-
-  const peserta =
-    hasilPesertaManual[index];
-
-
-  pilihPeserta(
-    peserta
-  );
-
-}
-
-
-// =====================================================
-// PILIH PESERTA
-// =====================================================
-
-function pilihPeserta(
-  peserta
-) {
-
-  // ===================================================
-  // SANGAT PENTING:
-  // Yang disimpan sebagai ID AKTIF adalah ID Peserta.
-  //
-  // Bukan nomor peserta A-001.
-  // ===================================================
-
-  idPesertaAktif =
-    String(
-      peserta.idPeserta ||
-      ""
-    ).trim();
-
-
-  // Jika API lama/hasil tertentu tidak memiliki
-  // idPeserta, gunakan nomor sebagai fallback.
-
-  if (!idPesertaAktif) {
-
-    idPesertaAktif =
-      String(
-        peserta.nomor ||
-        ""
-      ).trim();
-
-  }
-
-
-  nomorPesertaHasilRegistrasi =
-    String(
-      peserta.nomor ||
-      ""
-    ).trim();
-
-
-  el("pencarian").style.display =
-    "none";
-
-
-  el("hasil").style.display =
-    "block";
-
-
-  tampilkanPeserta(
-    peserta
-  );
-
-}
-
-
-// =====================================================
-// TAMPILKAN DATA PESERTA
-// =====================================================
-
-function tampilkanPeserta(
-  peserta
-) {
-
-  const hasil =
-    el("hasil");
-
-
-  hasil.style.display =
-    "block";
-
-
-  // ===================================================
-  // DATA UTAMA
-  // ===================================================
-
-  const idPeserta =
-
-    String(
-      peserta.idPeserta ||
-      idPesertaAktif ||
-      ""
-    ).trim();
-
-
-  const nomorPeserta =
-
-    String(
-      peserta.nomor ||
-      ""
-    ).trim();
-
-
-  const statusPembayaran =
-
-    String(
-      peserta.statusPembayaran ||
-      ""
-    ).trim();
-
-
-  const statusRegistrasi =
-
-    String(
-      peserta.statusRegistrasi ||
-      ""
-    ).trim();
-
-
-  const sudahRegistrasi =
-
-    statusRegistrasi ===
-    "Sudah Registrasi";
-
-
-  const pembayaranLunas =
-
-    statusPembayaran ===
-    "Lunas";
-
-
-  // ===================================================
-  // PASTIKAN ID AKTIF
-  // ===================================================
-
-  if (idPeserta) {
-
-    idPesertaAktif =
-      idPeserta;
-
-  }
-
-
-  // ===================================================
-  // STATUS PEMBAYARAN
-  // ===================================================
-
-  let kelasPembayaran =
-    "status-belum";
-
-
-  if (pembayaranLunas) {
-
-    kelasPembayaran =
-      "status-lunas";
-
-  }
-
-
-  // ===================================================
-  // STATUS REGISTRASI
-  // ===================================================
-
-  let kelasRegistrasi =
-    "status-belum";
-
-
-  if (sudahRegistrasi) {
-
-    kelasRegistrasi =
-      "status-sudah";
-
-  }
-
-
-  // ===================================================
-  // TAMPILAN NOMOR
-  // ===================================================
-  //
-  // BELUM REGISTRASI:
-  // tampilkan ID Peserta.
-  //
-  // SUDAH REGISTRASI:
-  // tampilkan Nomor Peserta.
-  // ===================================================
-
-  let nomorUtamaHTML = "";
-
-
-  if (sudahRegistrasi && nomorPeserta) {
-
-    nomorUtamaHTML = `
-
-      <div class="nomor-registrasi">
-
-        <div class="nomor-registrasi-label">
-
-          Nomor Peserta
-
-        </div>
-
-        <div class="nomor-registrasi-value">
-
-          ${escapeHTML(
-            nomorPeserta
-          )}
-
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-  else {
-
-    nomorUtamaHTML = `
-
-      <div class="nomor-label">
-
-        ID Peserta
-
-      </div>
-
-      <div class="nomor">
-
-        ${escapeHTML(
-          idPeserta || "-"
-        )}
-
-      </div>
-
-    `;
-
-  }
-
-
-  // ===================================================
-  // TOMBOL REGISTRASI
-  // ===================================================
-
-  let tombolRegistrasi =
-    "";
-
-
-  if (sudahRegistrasi) {
-
-    tombolRegistrasi = `
-
-      <button
-        id="registrasiButton"
-        class="registrasi-button"
-        type="button"
-        disabled>
-
-        ✅ REGISTRASI BERHASIL
-
-      </button>
-
-    `;
-
-  }
-
-  else if (!pembayaranLunas) {
-
-    tombolRegistrasi = `
-
-      <button
-        id="registrasiButton"
-        class="registrasi-button"
-        type="button"
-        disabled>
-
-        🔒 PEMBAYARAN BELUM LUNAS
-
-      </button>
-
-    `;
-
-  }
-
-  else {
-
-    tombolRegistrasi = `
-
-      <button
-        id="registrasiButton"
-        class="registrasi-button"
-        type="button">
-
-        ✅ REGISTRASI PESERTA
-
-      </button>
-
-    `;
-
-  }
-
-
-  // ===================================================
-  // WAKTU REGISTRASI
-  // ===================================================
-
-  let waktuHTML =
-    "";
-
-
-  if (
-    peserta.waktuRegistrasi
-  ) {
-
-    waktuHTML = `
-
-      <div class="waktu">
-
-        Waktu Registrasi:<br>
-
-        <strong>
-
-          ${escapeHTML(
-            formatWaktu(
-              peserta.waktuRegistrasi
-            )
-          )}
-
-        </strong>
-
-      </div>
-
-    `;
-
-  }
-
-
-  // ===================================================
-  // DATA LENGKAP
-  // ===================================================
-
-  hasil.innerHTML = `
-
-    <div class="success">
-
-      ✅ PESERTA DITEMUKAN
-
-    </div>
-
-
-    ${nomorUtamaHTML}
-
-
-    <div class="data">
-
-
-      ${
-        !sudahRegistrasi && idPeserta
-          ? `
-            <div class="row">
-
-              <div class="label">
-
-                ID Peserta
-
-              </div>
-
-              <div class="value">
-
-                ${escapeHTML(
-                  idPeserta
-                )}
-
-              </div>
-
-            </div>
-          `
-          : ""
-      }
-
-
-      <div class="row">
-
-        <div class="label">
-
-          Nama Peserta
-
-        </div>
-
-        <div class="value">
-
-          ${escapeHTML(
-            peserta.nama || "-"
-          )}
-
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-
-          Usia
-
-        </div>
-
-        <div class="value">
-
-          ${escapeHTML(
-            peserta.usia || "-"
-          )}
-
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-
-          Nama Orang Tua
-
-        </div>
-
-        <div class="value">
-
-          ${escapeHTML(
-            peserta.orangtua || "-"
-          )}
-
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-
-          Kategori
-
-        </div>
-
-        <div class="value">
-
-          ${escapeHTML(
-            peserta.kategori || "-"
-          )}
-
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-
-          Status Pembayaran
-
-        </div>
-
-        <div
-          class="status ${kelasPembayaran}">
-
-          ${escapeHTML(
-            peserta.statusPembayaran || "-"
-          )}
-
-        </div>
-
-      </div>
-
-
-      <div class="row">
-
-        <div class="label">
-
-          Status Registrasi
-
-        </div>
-
-        <div
-          id="statusRegistrasi"
-          class="status ${kelasRegistrasi}">
-
-          ${escapeHTML(
-            peserta.statusRegistrasi || "-"
-          )}
-
-        </div>
-
-      </div>
-
-
-      ${waktuHTML}
-
-
-      ${tombolRegistrasi}
-
-
-      <button
-        id="kembaliKeMenuDariHasil"
-        class="secondary-button"
-        type="button">
-
-        ← KEMBALI KE MENU
-
-      </button>
-
-
-    </div>
-
-  `;
-
-
-  // ===================================================
-  // EVENT REGISTRASI
-  // ===================================================
-
-  const tombolRegistrasiElement =
-    el("registrasiButton");
-
-
-  if (
-    tombolRegistrasiElement &&
-    !sudahRegistrasi &&
-    pembayaranLunas
-  ) {
-
-    tombolRegistrasiElement
-      .addEventListener(
-        "click",
-        registrasiPeserta
-      );
-
-  }
-
-
-  // ===================================================
-  // EVENT KEMBALI
-  // ===================================================
-
-  const tombolKembali =
-    el(
-      "kembaliKeMenuDariHasil"
-    );
-
-
-  if (tombolKembali) {
-
-    tombolKembali
-      .addEventListener(
-        "click",
-        kembaliKeMenu
-      );
+    cariManual();
 
   }
 
@@ -2916,762 +1840,18 @@ function tampilkanPeserta(
 
 
 // =====================================================
-// PESERTA TIDAK DITEMUKAN
+// RESET SAAT HALAMAN DIBUKA
 // =====================================================
 
-function tampilkanPesertaTidakDitemukan(
-  message
-) {
-
-  const hasil =
-    el("hasil");
-
-
-  hasil.style.display =
-    "block";
-
-
-  hasil.innerHTML = `
-
-    <div class="error">
-
-      ❌ PESERTA TIDAK DITEMUKAN
-
-    </div>
-
-
-    <div class="nomor">
-
-      ${escapeHTML(
-        idPesertaAktif
-      )}
-
-    </div>
-
-
-    <div
-      style="
-        text-align:center;
-        margin-top:15px;
-        color:#777;
-      ">
-
-      ${escapeHTML(
-        message
-      )}
-
-    </div>
-
-
-    <button
-      id="kembaliDariTidakDitemukan"
-      class="secondary-button"
-      type="button">
-
-      ← KEMBALI KE MENU
-
-    </button>
-
-  `;
-
-
-  const button =
-    el(
-      "kembaliDariTidakDitemukan"
-    );
-
-
-  if (button) {
-
-    button.addEventListener(
-      "click",
-      kembaliKeMenu
-    );
-
-  }
-
-}
-
-
-// =====================================================
-// ERROR API
-// =====================================================
-
-function tampilkanErrorAPI() {
-
-  const hasil =
-    el("hasil");
-
-
-  hasil.style.display =
-    "block";
-
-
-  hasil.innerHTML = `
-
-    <div class="error">
-
-      ❌ GAGAL MENGHUBUNGI SERVER
-
-    </div>
-
-
-    <div
-      style="
-        text-align:center;
-        margin-top:15px;
-      ">
-
-      ID Peserta:
-
-      <strong>
-
-        ${escapeHTML(
-          idPesertaAktif
-        )}
-
-      </strong>
-
-      <br><br>
-
-      Silakan coba lagi.
-
-    </div>
-
-
-    <button
-      id="kembaliDariError"
-      class="secondary-button"
-      type="button">
-
-      ← KEMBALI KE MENU
-
-    </button>
-
-  `;
-
-
-  const button =
-    el(
-      "kembaliDariError"
-    );
-
-
-  if (button) {
-
-    button.addEventListener(
-      "click",
-      kembaliKeMenu
-    );
-
-  }
-
-}
-
-
-// =====================================================
-// REGISTRASI PESERTA
-// =====================================================
-//
-// PENTING:
-//
-// API menerima ID PESERTA.
-//
-// Contoh:
-//
-// MW46-001
-//
-// API kemudian membuat nomor:
-//
-// A-001
-//
-// Jadi kita TIDAK mengirim A-001 ke API.
-// =====================================================
-
-async function registrasiPeserta() {
-
-  if (!idPesertaAktif) {
-
-    alert(
-      "ID Peserta tidak ditemukan."
-    );
-
-    return;
-
-  }
-
-
-  if (sedangRegistrasi) {
-
-    return;
-
-  }
-
-
-  const button =
-    el("registrasiButton");
-
-
-  if (!button) {
-
-    return;
-
-  }
-
-
-  sedangRegistrasi =
-    true;
-
-
-  button.disabled =
-    true;
-
-
-  button.textContent =
-    "⏳ MEMPROSES...";
-
-
-  console.log(
-    "Registrasi menggunakan ID Peserta:",
-    idPesertaAktif
-  );
-
-
-  try {
-
-    const response =
-      await fetch(
-
-        API_URL +
-        "?action=registrasi&nomor=" +
-        encodeURIComponent(
-          idPesertaAktif
-        ),
-
-        {
-
-          method:
-            "GET",
-
-          cache:
-            "no-store"
-
-        }
-
-      );
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        "HTTP Error " +
-        response.status
-      );
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    console.log(
-      "Respons registrasi:",
-      data
-    );
-
-
-    // =================================================
-    // REGISTRASI BERHASIL
-    // =================================================
-
-    if (data.success) {
-
-
-      // ===============================================
-      // SIMPAN NOMOR BARU
-      // ===============================================
-
-      nomorPesertaHasilRegistrasi =
-        String(
-          data.nomor ||
-          ""
-        ).trim();
-
-
-      // ===============================================
-      // UPDATE STATUS
-      // ===============================================
-
-      const status =
-        el("statusRegistrasi");
-
-
-      if (status) {
-
-        status.textContent =
-          "Sudah Registrasi";
-
-
-        status.className =
-          "status status-sudah";
-
-      }
-
-
-      // ===============================================
-      // UPDATE NOMOR UTAMA
-      // ===============================================
-      //
-      // ID Peserta:
-      // MW46-001
-      //
-      // berubah menjadi:
-      // A-001
-      // ===============================================
-
-      const nomorLabel =
-        document.querySelector(
-          ".nomor-label"
-        );
-
-
-      const nomorElement =
-        document.querySelector(
-          ".nomor"
-        );
-
-
-      if (
-        nomorLabel &&
-        nomorElement
-      ) {
-
-        nomorLabel.outerHTML = `
-
-          <div class="nomor-registrasi">
-
-            <div class="nomor-registrasi-label">
-
-              Nomor Peserta
-
-            </div>
-
-            <div class="nomor-registrasi-value">
-
-              ${escapeHTML(
-                nomorPesertaHasilRegistrasi
-              )}
-
-            </div>
-
-          </div>
-
-        `;
-
-
-        nomorElement.remove();
-
-      }
-
-      else {
-
-        // Jika struktur tampilan sudah berubah,
-        // cari container data dan tambahkan nomor.
-
-        const dataContainer =
-          document.querySelector(
-            ".data"
-          );
-
-
-        if (dataContainer) {
-
-          const nomorBaruElement =
-            document.createElement(
-              "div"
-            );
-
-
-          nomorBaruElement.className =
-            "nomor-registrasi";
-
-
-          nomorBaruElement.innerHTML = `
-
-            <div class="nomor-registrasi-label">
-
-              Nomor Peserta
-
-            </div>
-
-            <div class="nomor-registrasi-value">
-
-              ${escapeHTML(
-                nomorPesertaHasilRegistrasi
-              )}
-
-            </div>
-
-          `;
-
-
-          dataContainer.prepend(
-            nomorBaruElement
-          );
-
-        }
-
-      }
-
-
-      // ===============================================
-      // UPDATE WAKTU
-      // ===============================================
-
-      const waktuBaru =
-        formatWaktu(
-          data.waktu
-        );
-
-
-      const waktuLama =
-        document.querySelector(
-          ".waktu"
-        );
-
-
-      if (waktuLama) {
-
-        waktuLama.innerHTML = `
-
-          Waktu Registrasi:<br>
-
-          <strong>
-
-            ${escapeHTML(
-              waktuBaru
-            )}
-
-          </strong>
-
-        `;
-
-      }
-
-      else {
-
-        const dataContainer =
-          document.querySelector(
-            ".data"
-          );
-
-
-        if (dataContainer) {
-
-          const div =
-            document.createElement(
-              "div"
-            );
-
-
-          div.className =
-            "waktu";
-
-
-          div.innerHTML = `
-
-            Waktu Registrasi:<br>
-
-            <strong>
-
-              ${escapeHTML(
-                waktuBaru
-              )}
-
-            </strong>
-
-          `;
-
-
-          dataContainer.insertBefore(
-            div,
-            button
-          );
-
-        }
-
-      }
-
-
-      // ===============================================
-      // UPDATE BUTTON
-      // ===============================================
-
-      button.textContent =
-        "✅ REGISTRASI BERHASIL";
-
-
-      button.disabled =
-        true;
-
-
-      // ===============================================
-      // ALERT
-      // ===============================================
-
-      alert(
-
-        "✅ REGISTRASI BERHASIL!\n\n" +
-
-        "Nomor Peserta: " +
-        (
-          data.nomor ||
-          "-"
-        ) +
-
-        "\nNama: " +
-        (
-          data.nama ||
-          "-"
-        ) +
-
-        "\nWaktu: " +
-        (
-          waktuBaru ||
-          "-"
-        )
-
-      );
-
-
-      // ===============================================
-      // PENTING:
-      // idPesertaAktif TETAP ID PESERTA
-      // ===============================================
-      //
-      // Kita sengaja TIDAK mengubah:
-      //
-      // idPesertaAktif = data.nomor
-      //
-      // karena jika panitia melakukan proses lain
-      // atau API dipanggil kembali, identitas peserta
-      // tetap harus menggunakan ID Peserta.
-      // ===============================================
-
-    }
-
-
-    // =================================================
-    // REGISTRASI GAGAL
-    // =================================================
-
-    else {
-
-      // -----------------------------------------------
-      // Jika sebenarnya sudah terdaftar
-      // -----------------------------------------------
-
-      if (
-        data.sudahRegistrasi &&
-        data.nomor
-      ) {
-
-        nomorPesertaHasilRegistrasi =
-          String(
-            data.nomor
-          ).trim();
-
-
-        button.textContent =
-          "✅ REGISTRASI BERHASIL";
-
-
-        button.disabled =
-          true;
-
-
-        const status =
-          el("statusRegistrasi");
-
-
-        if (status) {
-
-          status.textContent =
-            "Sudah Registrasi";
-
-
-          status.className =
-            "status status-sudah";
-
-        }
-
-
-        alert(
-
-          "Peserta ini sudah melakukan registrasi.\n\n" +
-
-          "Nomor Peserta: " +
-          data.nomor
-
-        );
-
-
-        return;
-
-      }
-
-
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        "✅ REGISTRASI PESERTA";
-
-
-      alert(
-
-        "❌ REGISTRASI GAGAL\n\n" +
-
-        (
-          data.message ||
-          "Terjadi kesalahan."
-        )
-
-      );
-
-    }
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Error registrasi:",
-      error
-    );
-
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      "✅ REGISTRASI PESERTA";
-
-
-    alert(
-
-      "❌ GAGAL MENGHUBUNGI SERVER\n\n" +
-
-      "Silakan coba lagi."
-
-    );
-
-  }
-
-  finally {
-
-    sedangRegistrasi =
-      false;
-
-  }
-
-}
-
-
-// =====================================================
-// EVENT LISTENER
-// =====================================================
-
-document.addEventListener(
-
-  "DOMContentLoaded",
-
+window.addEventListener(
+  'beforeunload',
   function() {
 
-
-    // ===============================================
-    // MULAI SCAN
-    // ===============================================
-
-    el("mulaiButton")
-      .addEventListener(
-        "click",
-        mulaiScanner
-      );
-
-
-    // ===============================================
-    // CARI MANUAL
-    // ===============================================
-
-    el("cariManualButton")
-      .addEventListener(
-        "click",
-        bukaPencarian
-      );
-
-
-    // ===============================================
-    // TOMBOL CARI
-    // ===============================================
-
-    el("searchButton")
-      .addEventListener(
-        "click",
-        cariManual
-      );
-
-
-    // ===============================================
-    // KEMBALI DARI PENCARIAN
-    // ===============================================
-
-    el(
-      "kembaliDariPencarianButton"
-    )
-      .addEventListener(
-        "click",
-        kembaliKeMenu
-      );
-
-
-    // ===============================================
-    // ENTER PADA PENCARIAN
-    // ===============================================
-
-    el("inputPencarian")
-      .addEventListener(
-
-        "keydown",
-
-        function(event) {
-
-          if (
-            event.key ===
-            "Enter"
-          ) {
-
-            event.preventDefault();
-
-            cariManual();
-
-          }
-
-        }
-
-      );
-
-
-    console.log(
-      "Aplikasi registrasi siap digunakan."
-    );
+    berhentiScanner();
 
   }
-
 );
+
 
 </script>
 
